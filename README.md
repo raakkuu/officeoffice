@@ -2,6 +2,10 @@
 
 **A local-first multi-agent coding orchestrator for real developer workflows.**
 
+[![CI](https://github.com/raakkuu/officeoffice/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/raakkuu/officeoffice/actions/workflows/ci.yml)
+[![Node.js 20+](https://img.shields.io/badge/Node.js-20%2B-43853d?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-gold.svg)](LICENSE)
+
 Turn one engineering request into a coordinated plan for specialist coding agents. Office Office is the orchestrator—not a model or an AI subscription. You choose and configure the provider CLIs you trust.
 
 <p align="center">
