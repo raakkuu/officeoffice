@@ -6,6 +6,7 @@ import fs from 'node:fs/promises';
 import { loadConfig } from './config.js';
 import { status } from './git.js';
 import { Orchestrator } from './supervisor.js';
+import { CollaborationStore } from './collaboration.js';
 
 export async function startServer(cwd = process.cwd(), port = 4311) {
   const app = Fastify({ logger: false });
@@ -14,6 +15,7 @@ export async function startServer(cwd = process.cwd(), port = 4311) {
 
   let runActive = false;
   let lastError: string | null = null;
+  const collaboration = new CollaborationStore(cwd);
 
   await app.register(fastifyStatic, { root: web });
 
@@ -100,6 +102,48 @@ export async function startServer(cwd = process.cwd(), port = 4311) {
       accepted: true,
       message: 'Run started. Progress will appear in the dashboard.'
     });
+  });
+
+
+  // Local-first collaboration APIs. Records are persisted in .hive/collaboration.
+  app.get('/api/agents', async () => collaboration.agents());
+  app.post('/api/agents', async (request, reply) => {
+    try { return reply.code(201).send(await collaboration.createAgent((request.body ?? {}) as Record<string, unknown>)); }
+    catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
+  });
+  app.patch('/api/agents/:id', async (request, reply) => {
+    const { id } = request.params as { id: string };
+    try { return await collaboration.updateAgent(id, (request.body ?? {}) as Record<string, unknown>); }
+    catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
+  });
+  app.get('/api/skills', async () => collaboration.skills());
+  app.post('/api/skills', async (request, reply) => {
+    try { return reply.code(201).send(await collaboration.createSkill((request.body ?? {}) as Record<string, unknown>)); }
+    catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
+  });
+  app.get('/api/rooms', async () => collaboration.rooms());
+  app.post('/api/rooms', async (request, reply) => {
+    try { return reply.code(201).send(await collaboration.createRoom((request.body ?? {}) as Record<string, unknown>)); }
+    catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
+  });
+  app.post('/api/rooms/:id/close', async (request, reply) => {
+    const { id } = request.params as { id: string };
+    try { return await collaboration.closeRoom(id); }
+    catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
+  });
+  app.get('/api/rooms/:id/messages', async (request) => {
+    const { id } = request.params as { id: string };
+    return collaboration.roomMessages(id);
+  });
+  app.post('/api/rooms/:id/messages', async (request, reply) => {
+    const { id } = request.params as { id: string };
+    try { return reply.code(201).send(await collaboration.postRoomMessage(id, (request.body ?? {}) as { from?: unknown; body?: unknown })); }
+    catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
+  });
+  app.get('/api/artifacts', async () => collaboration.artifacts());
+  app.post('/api/artifacts', async (request, reply) => {
+    try { return reply.code(201).send(await collaboration.createArtifact((request.body ?? {}) as Record<string, unknown>)); }
+    catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
   });
 
   await app.listen({ host: '127.0.0.1', port });
