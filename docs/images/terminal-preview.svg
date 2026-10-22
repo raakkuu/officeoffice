@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="540" viewBox="0 0 1200 540" role="img" aria-labelledby="title desc">
+<title id="title">Office Office CLI example</title><desc id="desc">Illustrative terminal concept showing the Office Office command line starting a coding task, Michael planning, specialists working, and a final summary. This is a documentation illustration, not a captured terminal session.</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#211e1c"/><stop offset="1" stop-color="#332824"/></linearGradient></defs>
+<rect width="1200" height="540" rx="22" fill="#f5f0e7"/><rect x="18" y="18" width="1164" height="504" rx="16" fill="url(#bg)" stroke="#4a3b34"/>
+<path d="M34 18 H1166 Q1182 18 1182 34 V68 H18 V34 Q18 18 34 18" fill="#302825"/>
+<circle cx="43" cy="43" r="6" fill="#d87870"/><circle cx="65" cy="43" r="6" fill="#d8b16b"/><circle cx="87" cy="43" r="6" fill="#77b48a"/>
+<text x="600" y="48" text-anchor="middle" fill="#d4c6b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">office — local agent orchestrator</text>
+<g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18">
+<text x="55" y="112" fill="#d7b477">$ office "Fix the login validation bug and add regression tests"</text>
+<text x="55" y="157" fill="#8fc6a0">✓</text><text x="82" y="157" fill="#f5f0e7">Office Office is preparing your run…</text>
+<text x="55" y="198" fill="#e4bd7d">MICHAEL</text><text x="178" y="198" fill="#d9d0c7">Plan created · 3 tasks · dependencies mapped</text>
+<text x="55" y="244" fill="#e4bd7d">DWIGHT</text><text x="178" y="244" fill="#d9d0c7">Inspecting validation logic</text>
+<text x="55" y="286" fill="#e4bd7d">PAM</text><text x="178" y="286" fill="#d9d0c7">Reviewing error states and form behavior</text>
+<text x="55" y="328" fill="#e4bd7d">JIM</text><text x="178" y="328" fill="#d9d0c7">Preparing regression coverage</text>
+<path d="M55 358 H1145" stroke="#5a4840" stroke-width="1"/>
+<text x="55" y="399" fill="#8fc6a0">✓</text><text x="82" y="399" fill="#f5f0e7">Run summary</text>
+<text x="55" y="435" fill="#bdb0a2" font-size="15">Illustrative CLI concept — statuses and task output are examples, not live results.</text>
+<text x="55" y="480" fill="#e4bd7d" font-size="14">LOCAL-FIRST · YOU CHOOSE THE PROVIDERS · REVIEW THE GIT DIFF</text>
+</g></svg>
