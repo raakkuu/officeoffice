@@ -6,10 +6,10 @@
 [![Node.js 20+](https://img.shields.io/badge/Node.js-20%2B-43853d?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gold.svg)](LICENSE)
 
-Turn one engineering request into a coordinated plan for specialist coding agents. Office Office is the orchestrator—not a model or an AI subscription. You choose and configure the provider CLIs you trust.
+Turn one engineering request into a coordinated plan for specialist coding agents. **Office Office is a terminal-first tool, not a hosted web application.** Its optional local web dashboard lets you submit tasks and monitor run history. Office Office is the orchestrator—not a model or an AI subscription. You choose and configure the provider CLIs you trust.
 
 <p align="center">
-  <img src="docs/images/dashboard-preview.svg" alt="Illustrative Office Office dashboard preview" width="100%">
+  <img src="docs/images/terminal-preview.svg" alt="Illustrative Office Office terminal workflow concept, not a live screenshot" width="100%">
 </p>
 
 <p align="center">
@@ -24,9 +24,13 @@ Turn one engineering request into a coordinated plan for specialist coding agent
 - **Jim** focuses on testing and quality.
 - Dependency-aware scheduling with configurable parallelism.
 - Persistent task and run history in the local `.hive/` directory.
-- Responsive local web dashboard with a task composer and run tracking.
+- Optional responsive local web dashboard with a task composer and run tracking.
 - Provider adapters for Claude Code, Codex CLI, Gemini CLI, Ollama, and custom CLI configurations.
 - Node.js-based process execution; no native PTY dependency is required.
+
+## Optional web dashboard
+
+The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
 
 ## How it works
 
@@ -85,7 +89,7 @@ Start the local dashboard instead:
 office web
 ```
 
-Open the local URL printed in your terminal (by default, `http://127.0.0.1:4311`). The dashboard can submit tasks and display saved run progress. In GitHub Codespaces, open the **Ports** panel and use the forwarded URL for port **4311**.
+Open the local URL printed in your terminal (by default, `http://127.0.0.1:4311`). The optional dashboard can submit tasks and display saved run progress. In GitHub Codespaces, open the **Ports** panel and use the forwarded URL for port **4311**. The dashboard is a companion interface; the CLI remains a first-class way to use Office Office.
 
 The dashboard is intended for local development. Do not expose it publicly or forward it to an untrusted network.
 
