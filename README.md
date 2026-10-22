@@ -34,7 +34,7 @@ The web interface is a local companion to the CLI. It is not a hosted product, a
 
 ## Terminal identity
 
-The CLI uses a block-letter coral logo and a compact symbolic diagram showing the intended agent workflow. The artwork is terminal text, not a cloud-hosted architecture or a claim that every agent is currently running. Accent colors are used only in interactive terminals and can be disabled with `NO_COLOR`.
+The CLI uses a pixel-inspired block-letter logo with a coral accent and a minimal gold wordmark. The artwork is terminal text, not a cloud-hosted architecture or a screenshot of a completed run. Accent colors are used only in interactive terminals and can be disabled with `NO_COLOR`.
 
 ```text
  ██████╗ ███████╗███████╗██╗ ██████╗███████╗
@@ -44,23 +44,7 @@ The CLI uses a block-letter coral logo and a compact symbolic diagram showing th
 ╚██████╔╝██║     ██║     ██║╚██████╗███████╗
  ╚═════╝ ╚═╝     ╚═╝     ╚═╝ ╚═════╝╚══════╝
              O F F I C E   O F F I C E
-
-                 ┌─────────────────┐
-                 │  MICHAEL / PLAN │
-                 │   + COORDINATE  │
-                 └────────┬────────┘
-             ┌────────────┼────────────┐
-             ▼            ▼            ▼
-        ┌─────────┐  ┌─────────┐  ┌─────────┐
-        │  DWIGHT │  │   PAM   │  │   JIM   │
-        │ BACKEND │  │ FRONTEND│  │  TESTS  │
-        └────┬────┘  └────┬────┘  └────┬────┘
-             ╰────────────┼────────────╯
-                          ▼
-                 [ REVIEW / RESULTS ]
 ```
-
-The diagram communicates the intended workflow. Actual execution and completion depend on the plan and configured provider CLIs.
 ## How it works
 
 <p align="center">
