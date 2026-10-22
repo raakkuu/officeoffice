@@ -30,6 +30,14 @@ Turn one engineering request into a coordinated plan for specialist coding agent
 - Provider adapters for Claude Code, Codex CLI, Gemini CLI, Ollama, and custom CLI configurations.
 - Node.js-based process execution; no native PTY dependency is required.
 
+## Agent-to-agent communication (visual guide)
+
+<p align="center">
+  <img src="docs/images/agent-communication.svg" alt="Office Office agent collaboration: Michael delegates to specialists who share bounded handoff notes and project knowledge, with state stored locally." width="100%">
+</p>
+
+The diagram shows the intended collaboration model: a supervisor delegates work, specialist agents pass findings through task dependencies and shared artifacts, and the results are reviewed. **Current implementation status matters:** profiles, saved skills, room records, manual room messages, and project artifacts are persisted locally; task dependency results are passed into downstream prompts. Autonomous agent-to-agent conversations and AI-facilitated meetings are not available yet.
+
 ## Optional web dashboard
 
 The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. The dashboard includes Overview, task submission, built-in and user-created agent profiles, Meeting Room/Cafeteria room records with persisted messages, a local skills library, shared project knowledge/artifacts, Run history, and Workspace health. Rooms are bounded and persisted, but agent-to-agent autonomous conversation and AI-facilitated meetings are not yet implemented. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
@@ -68,9 +76,44 @@ The CLI uses a pixel-inspired block-letter logo with a coral accent and a minima
 - At least one supported provider CLI installed and authenticated, or a custom CLI provider configured
 - Provider usage may incur charges depending on your account and provider
 
-## Install from source
+## Install from source (Windows, macOS, Linux, and Termux)
 
-Clone the repository and install dependencies:
+Office Office needs **Node.js 20+** and Git. Commands below are for a fresh install. Use the section after this one to update an existing checkout without losing your work.
+
+### Windows — Command Prompt (CMD) or PowerShell
+
+Install Git and Node.js if they are missing (using Windows Package Manager):
+
+```powershell
+winget install --id Git.Git -e
+winget install --id OpenJS.NodeJS.LTS -e
+```
+
+Close and reopen the terminal, then check versions:
+
+```cmd
+git --version
+node --version
+npm --version
+```
+
+Clone and build (these commands work in CMD and PowerShell):
+
+```cmd
+git clone https://github.com/raakkuu/officeoffice.git
+cd officeoffice
+npm install
+npm run check
+npm test
+npm run build
+npm link
+```
+
+If Windows asks for administrator permission for `npm link`, reopen the terminal with the appropriate permission or use the project locally with `npm run dev` if that script is available. Do not run commands from inside a different project directory.
+
+### macOS or Linux terminal
+
+Install Git and Node.js 20+ using your operating system's package manager or the official installers, then run:
 
 ```bash
 git clone https://github.com/raakkuu/officeoffice.git
@@ -81,6 +124,31 @@ npm test
 npm run build
 npm link
 ```
+
+For Ubuntu/Debian, `sudo apt install git` installs Git, but the distribution's Node.js package may be older than version 20; verify `node --version` and use a current Node.js 20+ installation.
+
+### Android — Termux
+
+Install Termux from a trusted source such as F-Droid or the official Termux GitHub releases. In Termux, run:
+
+```bash
+pkg update
+pkg upgrade
+pkg install git nodejs-lts
+git --version
+node --version
+npm --version
+git clone https://github.com/raakkuu/officeoffice.git
+cd officeoffice
+npm install
+npm run check
+npm test
+npm run build
+```
+
+Termux package availability can vary. If `nodejs-lts` is unavailable, run `pkg search nodejs` and install the current supported Node.js package. You can run the CLI inside Termux; provider CLIs (Claude Code, Codex, Gemini, or other providers) must separately support Android/Termux and be installed/authenticated there. Some providers may not support Termux.
+
+After building, use `npm link` where supported to expose the `office` command globally. If global linking is unavailable, run the CLI through the repository's documented npm scripts or use the project-local binary after checking `package.json` scripts.
 
 Then check your environment and inspect the available commands:
 
@@ -182,7 +250,53 @@ officeoffice/
 
 Read [SECURITY.md](SECURITY.md) to report a potential vulnerability.
 
-## Development and checks
+## Updating an existing checkout safely (keep changes synchronized)
+
+**Run these steps in order, one at a time.** Updating Git itself does not update Office Office. These steps update the repository code from GitHub.
+
+1. Open the terminal in your Office Office repository folder.
+2. Check for local edits before pulling:
+
+```bash
+git status
+git branch --show-current
+```
+
+3. If you have changes you want to keep, commit them or stash them before continuing. Do not overwrite uncommitted work.
+4. Switch to the branch you want to update and pull its latest commits. For the stable version, use `main`:
+
+```bash
+git switch main
+git pull --ff-only origin main
+```
+
+To test the collaboration work before it is merged, use `git switch feat/agent-collaboration` and then `git pull --ff-only origin feat/agent-collaboration` instead. That branch may change while the pull request is being reviewed.
+
+5. Install dependencies, check, test, and build in order:
+
+```bash
+npm install
+npm run check
+npm test
+npm run build
+```
+
+6. If you originally used `npm link` for a source install, relink after the build if your environment requires it:
+
+```bash
+npm link
+```
+
+7. Verify the command points to the updated install:
+
+```bash
+office --help
+office doctor
+```
+
+If `git pull` says you have divergent branches or local changes, stop and resolve that before running a reset. **Do not use `git reset --hard` as a routine update command**—it can delete local work. If you downloaded a ZIP instead of cloning with Git, download/extract the new version separately and migrate your local configuration/workspace carefully rather than running `git pull`.
+
+### Development and checks
 
 ```bash
 npm install
