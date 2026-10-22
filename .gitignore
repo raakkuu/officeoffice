@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+office.config.json
+.hive/messages/*.json
+.hive/tasks/*.json
+.DS_Store
