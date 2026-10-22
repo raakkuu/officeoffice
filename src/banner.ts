@@ -4,30 +4,35 @@ function paint(code: string, value: string): string {
   return useColor ? `\u001b[${code}m${value}\u001b[0m` : value;
 }
 
-/** A compact, terminal-safe diagram of the Office Office agent workflow. */
+/** Block-letter terminal identity for Office Office. */
 export function renderBanner(): string {
+  const coral = (value: string) => paint('38;5;203', value);
   const gold = (value: string) => paint('38;5;220', value);
-  const red = (value: string) => paint('38;5;160', value);
-  const muted = (value: string) => paint('2', value);
+  const muted = (value: string) => paint('38;5;245', value);
   return [
-    gold('   ╭──────────────────────────────────────────────────────╮'),
-    gold('   │') + '  ◈  ' + red('OFFICE OFFICE') + '  ' + muted('LOCAL-FIRST AGENT ORCHESTRATION') + '  ' + gold('│'),
-    gold('   ╰──────────────────────────────────────────────────────╯'),
+    coral(' ██████╗ ███████╗███████╗██╗ ██████╗███████╗'),
+    coral('██╔═══██╗██╔════╝██╔════╝██║██╔════╝██╔════╝'),
+    coral('██║   ██║█████╗  █████╗  ██║██║     █████╗  '),
+    coral('██║   ██║██╔══╝  ██╔══╝  ██║██║     ██╔══╝  '),
+    coral('╚██████╔╝██║     ██║     ██║╚██████╗███████╗'),
+    coral(' ╚═════╝ ╚═╝     ╚═╝     ╚═╝ ╚═════╝╚══════╝'),
+    gold('             O F F I C E   O F F I C E'),
+    muted('        LOCAL-FIRST MULTI-AGENT ORCHESTRATION'),
     '',
-    '                      .────────────.',
-    '                  .───(   MICHAEL    )───.',
-    '                  │     plan + review    │',
-    '                  ╰─────────┬───────────╯',
-    '             ┌───────────────┼───────────────┐',
-    '             ▼               ▼               ▼',
-    '       ┌──────────┐    ┌──────────┐    ┌──────────┐',
-    '       │  DWIGHT  │    │   PAM    │    │   JIM    │',
-    '       │ backend  │    │ frontend │    │   tests  │',
-    '       └────┬─────┘    └────┬─────┘    └────┬─────┘',
-    '            ╰───────────────┼───────────────╯',
-    '                            ▼',
-    '                  [ results • review • done ]',
+    '                 ┌─────────────────┐',
+    '                 │  MICHAEL / PLAN │',
+    '                 │   + COORDINATE  │',
+    '                 └────────┬────────┘',
+    '             ┌────────────┼────────────┐',
+    '             ▼            ▼            ▼',
+    '        ┌─────────┐  ┌─────────┐  ┌─────────┐',
+    '        │  DWIGHT │  │   PAM   │  │   JIM   │',
+    '        │ BACKEND │  │ FRONTEND│  │  TESTS  │',
+    '        └────┬────┘  └────┬────┘  └────┬────┘',
+    '             ╰────────────┼────────────╯',
+    '                          ▼',
+    '                 [ REVIEW / RESULTS ]',
     '',
-    muted('  CLI first  •  Local workspace  •  Your configured provider CLIs'),
+    muted('  CLI first  •  Local workspace  •  Configured provider CLIs'),
   ].join('\n');
 }
