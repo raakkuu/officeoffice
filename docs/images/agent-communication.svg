@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560" role="img" aria-labelledby="title desc">
+<title id="title">Office Office agent-to-agent communication</title>
+<desc id="desc">A user request is planned by Michael, delegated to specialist agents who exchange bounded messages and handoff notes, use shared project knowledge, and return results for review. State is stored locally.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111827"/><stop offset="1" stop-color="#19152b"/></linearGradient>
+  <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#fb7185"/><stop offset="1" stop-color="#fbbf24"/></linearGradient>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#fbbf24"/></marker>
+  <style>
+    .h{font:700 25px system-ui,sans-serif;fill:#f9fafb}.sub{font:14px system-ui,sans-serif;fill:#cbd5e1}.label{font:700 17px system-ui,sans-serif;fill:#f9fafb}.small{font:13px system-ui,sans-serif;fill:#cbd5e1}.tiny{font:12px system-ui,sans-serif;fill:#fbbf24}.node{fill:#20283a;stroke:#526078;stroke-width:1.5}.line{fill:none;stroke:#fbbf24;stroke-width:2.4;marker-end:url(#arrow)}.dashed{fill:none;stroke:#fb7185;stroke-width:2;stroke-dasharray:7 6}
+  </style>
+</defs>
+<rect width="1100" height="560" rx="24" fill="url(#bg)"/>
+<text x="48" y="54" class="h">OFFICE OFFICE / AGENT COLLABORATION</text>
+<text x="48" y="82" class="sub">A bounded, inspectable workflow — with project state kept on your device</text>
+<rect x="430" y="112" width="240" height="68" rx="14" class="node"/>
+<text x="550" y="140" text-anchor="middle" class="label">You / Task Request</text><text x="550" y="161" text-anchor="middle" class="small">CLI or local dashboard</text>
+<path d="M550 180 V215" class="line"/>
+<rect x="400" y="218" width="300" height="76" rx="14" stroke="url(#accent)" stroke-width="2" fill="#302337"/>
+<text x="550" y="247" text-anchor="middle" class="label">Michael · Supervisor</text><text x="550" y="269" text-anchor="middle" class="small">Plan • delegate • review</text>
+<path d="M450 294 L240 342" class="line"/><path d="M550 294 V342" class="line"/><path d="M650 294 L860 342" class="line"/>
+<rect x="90" y="346" width="300" height="78" rx="13" class="node"/><text x="240" y="375" text-anchor="middle" class="label">Specialist A</text><text x="240" y="397" text-anchor="middle" class="small">e.g. backend / research</text>
+<rect x="400" y="346" width="300" height="78" rx="13" class="node"/><text x="550" y="375" text-anchor="middle" class="label">Specialist B</text><text x="550" y="397" text-anchor="middle" class="small">e.g. frontend / analysis</text>
+<rect x="710" y="346" width="300" height="78" rx="13" class="node"/><text x="860" y="375" text-anchor="middle" class="label">Specialist C</text><text x="860" y="397" text-anchor="middle" class="small">e.g. tests / documentation</text>
+<path d="M240 424 V451 H550 V424" class="dashed"/><path d="M860 424 V451 H550" class="dashed"/>
+<rect x="155" y="462" width="790" height="58" rx="12" fill="#172d35" stroke="#2dd4bf" stroke-width="1.5"/>
+<text x="550" y="486" text-anchor="middle" class="label">Shared handoffs + project knowledge</text><text x="550" y="506" text-anchor="middle" class="small">Bounded messages • artifacts • dependency results • local .hive storage</text>
+<text x="48" y="540" class="tiny">Conceptual workflow. Autonomous agent-to-agent chat and AI-led meetings are not yet implemented.</text>
+</svg>
