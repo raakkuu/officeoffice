@@ -8,6 +8,17 @@
 
 Turn one engineering request into a coordinated plan for specialist coding agents. **Office Office is a terminal-first tool, not a hosted web application.** Its optional local web dashboard lets you submit tasks and monitor run history. Office Office is the orchestrator—not a model or an AI subscription. You choose and configure the provider CLIs you trust.
 
+## Core feature: a coordinated AI team
+
+Office Office is built around a supervisor and specialist agents—not just a single chatbot. Michael plans the work, delegates tasks to enabled specialists, and reviews their results. The collaboration foundation stores agent profiles, bounded room conversations, handoff results, and shared project artifacts locally so the workflow stays inspectable.
+
+<p align="center">
+  <img src="docs/images/agent-communication.svg" alt="Visual diagram of Office Office agent collaboration: a task goes to Michael, who delegates to specialist agents that share handoffs and project knowledge stored locally." width="100%">
+</p>
+
+**Implementation note:** the diagram shows the intended collaboration workflow. Agent profiles, saved skills, room records, manual room messages, and project artifacts are persisted locally; task dependency results are passed into downstream prompts. Fully autonomous agent-to-agent chat and AI-facilitated meetings are not implemented yet.
+
+
 ## Core feature: a team of AI agents that works together
 
 Office Office is built around **delegation and shared context**: Michael coordinates specialist agents, task dependencies pass findings forward, and shared project knowledge keeps the work organized.
