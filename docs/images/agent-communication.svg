@@ -1,28 +1,58 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560" role="img" aria-labelledby="title desc">
-<title id="title">Office Office agent-to-agent communication</title>
-<desc id="desc">A user request is planned by Michael, delegated to specialist agents who exchange bounded messages and handoff notes, use shared project knowledge, and return results for review. State is stored locally.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+<title id="title">Office Office — the AI team</title>
+<desc id="desc">A friendly cartoon illustration of a manager agent planning a task and coordinating coder, designer, and research agents. Speech bubbles and shared notes illustrate the intended collaboration vision. A clear note distinguishes current handoff support from future autonomous conversations.</desc>
 <defs>
-  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111827"/><stop offset="1" stop-color="#19152b"/></linearGradient>
-  <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#fb7185"/><stop offset="1" stop-color="#fbbf24"/></linearGradient>
-  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#fbbf24"/></marker>
-  <style>
-    .h{font:700 25px system-ui,sans-serif;fill:#f9fafb}.sub{font:14px system-ui,sans-serif;fill:#cbd5e1}.label{font:700 17px system-ui,sans-serif;fill:#f9fafb}.small{font:13px system-ui,sans-serif;fill:#cbd5e1}.tiny{font:12px system-ui,sans-serif;fill:#fbbf24}.node{fill:#20283a;stroke:#526078;stroke-width:1.5}.line{fill:none;stroke:#fbbf24;stroke-width:2.4;marker-end:url(#arrow)}.dashed{fill:none;stroke:#fb7185;stroke-width:2;stroke-dasharray:7 6}
-  </style>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101827"/><stop offset="1" stop-color="#20204a"/></linearGradient>
+ <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a78bfa"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
+ <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7dd3fc"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+ <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#86efac"/><stop offset="1" stop-color="#10b981"/></linearGradient>
+ <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#030712" flood-opacity=".28"/></filter>
+ <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L0 6 L9 3Z" fill="#a5b4fc"/></marker>
+ <style>
+ .white{font-family:ui-sans-serif,system-ui,sans-serif;fill:#f8fafc}.muted{font-family:ui-sans-serif,system-ui,sans-serif;fill:#cbd5e1}.title{font-size:36px;font-weight:850}.sub{font-size:18px}.name{font-size:21px;font-weight:800}.body{font-size:16px}.tiny{font-size:13px}.line{fill:none;stroke:#a5b4fc;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}.bubble{fill:#fff;stroke:#dbeafe;stroke-width:2}.bubbleText{font-family:ui-sans-serif,system-ui,sans-serif;fill:#172554;font-size:16px;font-weight:650}.card{fill:#182338;stroke:#394967;stroke-width:2}
+ </style>
 </defs>
-<rect width="1100" height="560" rx="24" fill="url(#bg)"/>
-<text x="48" y="54" class="h">OFFICE OFFICE / AGENT COLLABORATION</text>
-<text x="48" y="82" class="sub">A bounded, inspectable workflow — with project state kept on your device</text>
-<rect x="430" y="112" width="240" height="68" rx="14" class="node"/>
-<text x="550" y="140" text-anchor="middle" class="label">You / Task Request</text><text x="550" y="161" text-anchor="middle" class="small">CLI or local dashboard</text>
-<path d="M550 180 V215" class="line"/>
-<rect x="400" y="218" width="300" height="76" rx="14" stroke="url(#accent)" stroke-width="2" fill="#302337"/>
-<text x="550" y="247" text-anchor="middle" class="label">Michael · Supervisor</text><text x="550" y="269" text-anchor="middle" class="small">Plan • delegate • review</text>
-<path d="M450 294 L240 342" class="line"/><path d="M550 294 V342" class="line"/><path d="M650 294 L860 342" class="line"/>
-<rect x="90" y="346" width="300" height="78" rx="13" class="node"/><text x="240" y="375" text-anchor="middle" class="label">Specialist A</text><text x="240" y="397" text-anchor="middle" class="small">e.g. backend / research</text>
-<rect x="400" y="346" width="300" height="78" rx="13" class="node"/><text x="550" y="375" text-anchor="middle" class="label">Specialist B</text><text x="550" y="397" text-anchor="middle" class="small">e.g. frontend / analysis</text>
-<rect x="710" y="346" width="300" height="78" rx="13" class="node"/><text x="860" y="375" text-anchor="middle" class="label">Specialist C</text><text x="860" y="397" text-anchor="middle" class="small">e.g. tests / documentation</text>
-<path d="M240 424 V451 H550 V424" class="dashed"/><path d="M860 424 V451 H550" class="dashed"/>
-<rect x="155" y="462" width="790" height="58" rx="12" fill="#172d35" stroke="#2dd4bf" stroke-width="1.5"/>
-<text x="550" y="486" text-anchor="middle" class="label">Shared handoffs + project knowledge</text><text x="550" y="506" text-anchor="middle" class="small">Bounded messages • artifacts • dependency results • local .hive storage</text>
-<text x="48" y="540" class="tiny">Conceptual workflow. Autonomous agent-to-agent chat and AI-led meetings are not yet implemented.</text>
+<rect width="1200" height="760" rx="28" fill="url(#bg)"/>
+<circle cx="1090" cy="72" r="110" fill="#6366f1" opacity=".12"/><circle cx="90" cy="690" r="140" fill="#ec4899" opacity=".08"/>
+<text x="48" y="58" class="white title">Meet your AI team 👋</text>
+<text x="50" y="91" class="muted sub">One manager. Specialist teammates. A shared mission.</text>
+<rect x="42" y="120" width="1116" height="480" rx="26" fill="#f8fafc" filter="url(#shadow)"/>
+<!-- manager panel -->
+<rect x="64" y="143" width="270" height="430" rx="22" fill="#e9e7ff"/>
+<rect x="82" y="160" width="234" height="44" rx="14" fill="url(#purple)"/>
+<text x="199" y="188" text-anchor="middle" class="white name">TEAM MANAGER</text>
+<!-- friendly manager character -->
+<path d="M136 288 Q199 250 262 288 L277 348 Q199 382 121 348Z" fill="#334155"/>
+<rect x="157" y="302" width="84" height="76" rx="25" fill="#f1c7a5"/>
+<path d="M151 316 Q148 260 199 258 Q251 260 247 316 L232 301 L224 282 Q194 301 162 289Z" fill="#1e293b"/>
+<circle cx="181" cy="320" r="5" fill="#1e293b"/><circle cx="218" cy="320" r="5" fill="#1e293b"/><path d="M184 341 Q199 353 215 341" fill="none" stroke="#9a3412" stroke-width="3" stroke-linecap="round"/>
+<path d="M165 379 L150 414 L248 414 L233 379Z" fill="#6366f1"/><path d="M199 379 L188 397 L199 411 L210 397Z" fill="#fbbf24"/>
+<rect x="101" y="420" width="196" height="60" rx="14" fill="#fff" stroke="#c7d2fe" stroke-width="2"/>
+<text x="199" y="444" text-anchor="middle" class="bubbleText">Michael plans the work</text><text x="199" y="465" text-anchor="middle" class="bubbleText">and assigns tasks</text>
+<text x="88" y="514" class="muted" style="font-size:15px;fill:#4338ca;font-weight:700">✓ Breaks down the request</text><text x="88" y="540" class="muted" style="font-size:15px;fill:#4338ca;font-weight:700">✓ Tracks work and results</text>
+<!-- task bubble -->
+<path d="M367 173 h270 a15 15 0 0 1 15 15 v42 a15 15 0 0 1 -15 15 h-133 l-20 17 4-17 h-121 a15 15 0 0 1 -15-15 v-42 a15 15 0 0 1 15-15Z" class="bubble"/>
+<text x="502" y="201" text-anchor="middle" class="bubbleText">“Build a website for my business!”</text><text x="502" y="224" text-anchor="middle" class="muted" style="font-size:13px;fill:#64748b">A single request becomes a plan</text>
+<path d="M336 300 C380 300 390 300 420 300" class="line"/>
+<text x="377" y="286" text-anchor="middle" style="font:700 13px system-ui;fill:#4f46e5">DELEGATES</text>
+<!-- agent cards -->
+<rect x="367" y="330" width="222" height="224" rx="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="2"/>
+<circle cx="478" cy="390" r="42" fill="url(#blue)"/>
+<rect x="449" y="373" width="58" height="39" rx="12" fill="#0f2747" stroke="#fff" stroke-width="2"/><circle cx="466" cy="391" r="4" fill="#7dd3fc"/><circle cx="490" cy="391" r="4" fill="#7dd3fc"/><path d="M465 402 Q478 411 491 402" fill="none" stroke="#7dd3fc" stroke-width="3" stroke-linecap="round"/><path d="M478 346 V354 M438 374 L446 380 M518 374 L510 380" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+<text x="478" y="456" text-anchor="middle" class="bubbleText">CODER BOT</text><text x="478" y="482" text-anchor="middle" class="muted" style="font-size:14px;fill:#1e40af">Builds features</text><text x="478" y="503" text-anchor="middle" class="muted" style="font-size:14px;fill:#1e40af">and fixes bugs</text>
+<rect x="605" y="330" width="222" height="224" rx="20" fill="#f3e8ff" stroke="#d8b4fe" stroke-width="2"/>
+<circle cx="716" cy="390" r="42" fill="url(#purple)"/><rect x="687" y="373" width="58" height="39" rx="12" fill="#312e81" stroke="#fff" stroke-width="2"/><circle cx="704" cy="391" r="4" fill="#ddd6fe"/><circle cx="728" cy="391" r="4" fill="#ddd6fe"/><path d="M703 402 Q716 411 729 402" fill="none" stroke="#ddd6fe" stroke-width="3" stroke-linecap="round"/><path d="M716 346 V354 M676 374 L684 380 M756 374 L748 380" stroke="#7c3aed" stroke-width="4" stroke-linecap="round"/>
+<text x="716" y="456" text-anchor="middle" class="bubbleText">DESIGN BOT</text><text x="716" y="482" text-anchor="middle" class="muted" style="font-size:14px;fill:#6b21a8">Shapes the UI</text><text x="716" y="503" text-anchor="middle" class="muted" style="font-size:14px;fill:#6b21a8">and user experience</text>
+<rect x="843" y="330" width="222" height="224" rx="20" fill="#d1fae5" stroke="#6ee7b7" stroke-width="2"/>
+<circle cx="954" cy="390" r="42" fill="url(#green)"/><rect x="925" y="373" width="58" height="39" rx="12" fill="#064e3b" stroke="#fff" stroke-width="2"/><circle cx="942" cy="391" r="4" fill="#a7f3d0"/><circle cx="966" cy="391" r="4" fill="#a7f3d0"/><path d="M941 402 Q954 411 967 402" fill="none" stroke="#a7f3d0" stroke-width="3" stroke-linecap="round"/><path d="M954 346 V354 M914 374 L922 380 M994 374 L986 380" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
+<text x="954" y="456" text-anchor="middle" class="bubbleText">RESEARCH BOT</text><text x="954" y="482" text-anchor="middle" class="muted" style="font-size:14px;fill:#047857">Finds answers</text><text x="954" y="503" text-anchor="middle" class="muted" style="font-size:14px;fill:#047857">and useful resources</text>
+<!-- collaboration arrows -->
+<path d="M590 365 H601" class="line"/><path d="M828 365 H839" class="line"/>
+<rect x="403" y="564" width="626" height="25" rx="12" fill="#e0e7ff"/>
+<text x="716" y="582" text-anchor="middle" style="font:700 13px system-ui;fill:#4338ca">SHARED HANDOFFS • NOTES • PROJECT KNOWLEDGE</text>
+<!-- footer feature strip -->
+<rect x="42" y="620" width="1116" height="91" rx="20" class="card"/>
+<circle cx="84" cy="665" r="23" fill="#8b5cf6"/><path d="M73 662 Q84 648 95 662 Q84 677 73 662Z" fill="#fff"/><text x="120" y="655" class="white" style="font-size:18px;font-weight:800">Create teams • Share findings • Review results</text><text x="120" y="681" class="muted body">Local-first by design: your project context stays in your workspace.</text>
+<rect x="794" y="642" width="335" height="46" rx="13" fill="#312e81" stroke="#818cf8" stroke-width="1.5"/><text x="961" y="671" text-anchor="middle" class="white" style="font-size:16px;font-weight:800">Different agents. One mission.</text>
+<text x="600" y="741" text-anchor="middle" class="muted tiny">Concept illustration • Autonomous agent-to-agent chat and AI-led meetings are still planned.</text>
 </svg>
