@@ -14,7 +14,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }} 
+          node-version: ${{ matrix.node }}
+          # This repo intentionally has no committed lockfile; don't enable npm caching.
+          package-manager-cache: false
       - run: npm install
       - run: npm run check
       - run: npm test
