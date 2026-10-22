@@ -34,30 +34,33 @@ The web interface is a local companion to the CLI. It is not a hosted product, a
 
 ## Terminal identity
 
-Office Office includes a compact symbolic agent diagram in its CLI help, agent list, task startup, and dashboard startup. It is a terminal-native illustration of the real workflow—not a cloud service diagram or a screenshot of a completed run. ANSI accent colors are enabled only for interactive terminals and can be disabled with `NO_COLOR`.
+The CLI uses a block-letter coral logo and a compact symbolic diagram showing the intended agent workflow. The artwork is terminal text, not a cloud-hosted architecture or a claim that every agent is currently running. Accent colors are used only in interactive terminals and can be disabled with `NO_COLOR`.
 
 ```text
-   ╭──────────────────────────────────────────────────────╮
-   │  ◈  OFFICE OFFICE  LOCAL-FIRST AGENT ORCHESTRATION   │
-   ╰──────────────────────────────────────────────────────╯
+ ██████╗ ███████╗███████╗██╗ ██████╗███████╗
+██╔═══██╗██╔════╝██╔════╝██║██╔════╝██╔════╝
+██║   ██║█████╗  █████╗  ██║██║     █████╗  
+██║   ██║██╔══╝  ██╔══╝  ██║██║     ██╔══╝  
+╚██████╔╝██║     ██║     ██║╚██████╗███████╗
+ ╚═════╝ ╚═╝     ╚═╝     ╚═╝ ╚═════╝╚══════╝
+             O F F I C E   O F F I C E
 
-                      .────────────.
-                  .───(   MICHAEL    )───.
-                  │     plan + review    │
-                  ╰─────────┬───────────╯
-             ┌───────────────┼───────────────┐
-             ▼               ▼               ▼
-       ┌──────────┐    ┌──────────┐    ┌──────────┐
-       │  DWIGHT  │    │   PAM    │    │   JIM    │
-       │ backend  │    │ frontend │    │   tests  │
-       └────┬─────┘    └────┬─────┘    └────┬─────┘
-            ╰───────────────┼───────────────╯
-                            ▼
-                  [ results • review • done ]
+                 ┌─────────────────┐
+                 │  MICHAEL / PLAN │
+                 │   + COORDINATE  │
+                 └────────┬────────┘
+             ┌────────────┼────────────┐
+             ▼            ▼            ▼
+        ┌─────────┐  ┌─────────┐  ┌─────────┐
+        │  DWIGHT │  │   PAM   │  │   JIM   │
+        │ BACKEND │  │ FRONTEND│  │  TESTS  │
+        └────┬────┘  └────┬────┘  └────┬────┘
+             ╰────────────┼────────────╯
+                          ▼
+                 [ REVIEW / RESULTS ]
 ```
 
-The diagram communicates the intended flow. Actual task execution and completion still depend on your configured providers and the task plan they return.
-
+The diagram communicates the intended workflow. Actual execution and completion depend on the plan and configured provider CLIs.
 ## How it works
 
 <p align="center">
