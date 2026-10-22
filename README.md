@@ -317,11 +317,11 @@ Planned capabilities include:
 - **Shared project knowledge:** agents publish research, files, decisions, and test results as referenced artifacts that authorized teammates can reuse.
 - **Meeting Room:** bounded, visible multi-agent sessions with a topic, transcript, decisions, and action items.
 - **Cafeteria:** optional, user-triggered informal status exchange with session limits; it will not run an endless token-consuming conversation loop.
-- **Dynamic teams:** user-created agent profiles, assignable skills, and Michael's bounded selection of specialists when a task needs them, rather than a permanent four-agent ceiling.
+- **Dynamic teams:** user-created agent profiles and Michael's bounded selection of enabled specialists when a task needs them, rather than a permanent four-agent ceiling. Skill-to-agent assignment is a follow-up.
 - **Skills library:** reusable, inspectable capabilities for engineering, testing, research, documentation, data analysis, and other domains.
 - **Controlled project memory and data access:** explicit workspace/network permissions, provenance, retention controls, and secret redaction.
 
-**These collaboration features are planned, not implemented yet.** The collaboration implementation now provides locally persisted agent profiles, skill records, bounded Meeting Room/Cafeteria records, user-posted room messages, and shared project artifacts through the local dashboard API. Michael's planner is supplied the enabled agent roster and tasks are assigned to configured agent profiles. Room messages are currently manual: agents do not yet autonomously send messages to each other, meetings do not automatically invoke AI participants, and skills are stored as reusable instructions but are not automatically executed. The issue and design document remain the roadmap for those next capabilities.
+**The full collaboration vision is not implemented yet.** The current collaboration foundation provides locally persisted agent profiles, skill records, bounded Meeting Room/Cafeteria records, user-posted room messages, and shared project artifacts through the local dashboard API. Michael's planner is supplied the enabled agent roster and tasks are assigned to configured agent profiles. Room messages are currently manual: agents do not yet autonomously send messages to each other, meetings do not automatically invoke AI participants, and skills are stored as reusable instructions but are not automatically executed. The issue and design document remain the roadmap for those next capabilities.
 
 ## Known limitations
 
