@@ -108,22 +108,22 @@ export async function startServer(cwd = process.cwd(), port = 4311) {
   // Local-first collaboration APIs. Records are persisted in .hive/collaboration.
   app.get('/api/agents', async () => collaboration.agents());
   app.post('/api/agents', async (request, reply) => {
-    try { return reply.code(201).send(await collaboration.createAgent((request.body ?? {}) as Record<string, unknown>)); }
+    try { return reply.code(201).send(await collaboration.createAgent((request.body ?? {}) as any)); }
     catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
   });
   app.patch('/api/agents/:id', async (request, reply) => {
     const { id } = request.params as { id: string };
-    try { return await collaboration.updateAgent(id, (request.body ?? {}) as Record<string, unknown>); }
+    try { return await collaboration.updateAgent(id, (request.body ?? {}) as any); }
     catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
   });
   app.get('/api/skills', async () => collaboration.skills());
   app.post('/api/skills', async (request, reply) => {
-    try { return reply.code(201).send(await collaboration.createSkill((request.body ?? {}) as Record<string, unknown>)); }
+    try { return reply.code(201).send(await collaboration.createSkill((request.body ?? {}) as any)); }
     catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
   });
   app.get('/api/rooms', async () => collaboration.rooms());
   app.post('/api/rooms', async (request, reply) => {
-    try { return reply.code(201).send(await collaboration.createRoom((request.body ?? {}) as Record<string, unknown>)); }
+    try { return reply.code(201).send(await collaboration.createRoom((request.body ?? {}) as any)); }
     catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
   });
   app.post('/api/rooms/:id/close', async (request, reply) => {
@@ -142,7 +142,7 @@ export async function startServer(cwd = process.cwd(), port = 4311) {
   });
   app.get('/api/artifacts', async () => collaboration.artifacts());
   app.post('/api/artifacts', async (request, reply) => {
-    try { return reply.code(201).send(await collaboration.createArtifact((request.body ?? {}) as Record<string, unknown>)); }
+    try { return reply.code(201).send(await collaboration.createArtifact((request.body ?? {}) as any)); }
     catch (error) { return reply.code(400).send({ error: error instanceof Error ? error.message : String(error) }); }
   });
 
