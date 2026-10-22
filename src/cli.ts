@@ -4,6 +4,7 @@ import { Orchestrator } from './supervisor.js';
 import { startServer } from './server.js';
 import { status, isGitRepo } from './git.js';
 import { renderBanner } from './banner.js';
+import { formatSkillInstructions, loadSkills } from './skills.js';
 
 const args = process.argv.slice(2);
 const cmd = args[0];
@@ -21,7 +22,6 @@ function printConfig(cfg: Awaited<ReturnType<typeof loadConfig>>) {
     }, null, 2));
     return;
   }
-
   console.log('Office Office configuration');
   console.log('---------------------------');
   console.log(`Supervisor:       ${cfg.supervisor}`);
@@ -30,9 +30,7 @@ function printConfig(cfg: Awaited<ReturnType<typeof loadConfig>>) {
   console.log(`Auto commit:      ${cfg.autoCommit ? 'enabled' : 'disabled'}`);
   console.log(`Dashboard port:   ${cfg.webPort}`);
   console.log('\nWorker assignments:');
-  for (const [agent, provider] of Object.entries(cfg.workers)) {
-    console.log(`  ${agent.padEnd(12)} ${provider}`);
-  }
+  for (const [agent, provider] of Object.entries(cfg.workers)) console.log(`  ${agent.padEnd(12)} ${provider}`);
   console.log('\nProviders:');
   for (const provider of cfg.providers) {
     const enabled = provider.enabled === false ? 'disabled' : 'enabled';
@@ -43,20 +41,20 @@ function printConfig(cfg: Awaited<ReturnType<typeof loadConfig>>) {
 }
 
 async function main() {
-  // The logo is reserved for help/first-run discovery; operational commands stay concise.
   if (!cmd || cmd === 'help' || cmd === '--help' || cmd === '-h') {
     printBanner();
     console.log(`\nUsage:
   office "Build authentication"
-  office agents  (or: office agent)
+  office agents
+  office skills
   office doctor
   office status
-  office web
+  office web [--lan]
   office config
   office config --json
   office config set supervisor <provider-id>
 
-Help and the agent list do not require provider authentication.
+Help, the agent list, and the skill list do not require provider authentication.
 Provider API keys are only needed when the selected provider requires them.
 `);
     return;
@@ -72,6 +70,15 @@ Provider API keys are only needed when the selected provider requires them.
     return;
   }
 
+  if (cmd === 'skills' || cmd === 'skill') {
+    const skills = await loadSkills(cwd);
+    console.log(`\nSkills (${skills.length}):`);
+    if (!skills.length) console.log('  No repository skills found.');
+    for (const skill of skills) console.log(`  ${skill.id.padEnd(20)} ${skill.description} [${skill.source}]`);
+    console.log('\nSkill instructions are loaded from skills/<id>/SKILL.md. Workspace overrides can live in .hive/skills/<id>/SKILL.md.');
+    return;
+  }
+
   const cfg = await loadConfig(cwd);
 
   if (cmd === 'doctor') {
@@ -80,7 +87,8 @@ Provider API keys are only needed when the selected provider requires them.
     console.log(`Git repo: ${(await isGitRepo(cwd)) ? 'yes' : 'no'}`);
     for (const p of cfg.providers) {
       const d = await providerDoctor(p);
-      console.log(`${p.id.padEnd(8)} ${d.installed ? '✓ installed' : '✗ missing'}  ${d.apiKey ? 'API key detected' : 'API key not detected'}`);
+      const auth = p.kind === 'ollama' ? 'local provider' : d.apiKey ? 'API key detected' : 'API key not detected';
+      console.log(`${p.id.padEnd(8)} ${d.installed ? '✓ installed' : '✗ missing'}  ${auth}`);
     }
     console.log('\nThis checks executable/key presence; it does not prove that a provider can authenticate or make a successful request.');
     console.log('API keys are never written to the project or Hive.');
@@ -93,9 +101,14 @@ Provider API keys are only needed when the selected provider requires them.
   }
 
   if (cmd === 'web') {
-    const server = await startServer(cwd, cfg.webPort);
-    console.log(`Office Office UI: http://127.0.0.1:${cfg.webPort}`);
-    console.log('Local dashboard only. Press Ctrl+C to stop.\n');
+    const lan = args.includes('--lan');
+    const host = lan ? '0.0.0.0' : '127.0.0.1';
+    const server = await startServer(cwd, cfg.webPort, host);
+    console.log(`Office Office UI: http://${lan ? '<laptop-ip>' : '127.0.0.1'}:${cfg.webPort}`);
+    console.log(lan
+      ? 'LAN dashboard enabled. Only use this on a trusted private network; stop it with Ctrl+C when finished.'
+      : 'Local dashboard only. Press Ctrl+C to stop.');
+    console.log('');
     await new Promise<void>(resolve => process.on('SIGINT', () => {
       server.close().then(() => resolve());
     }));
