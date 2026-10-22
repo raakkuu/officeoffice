@@ -10,7 +10,7 @@ const cmd = args[0];
 const cwd = process.cwd();
 
 function printBanner() {
-  if (process.stdout.isTTY && !process.env.NO_COLOR) console.log(renderBanner());
+  if (process.stdout.isTTY) console.log(renderBanner());
 }
 
 function printConfig(cfg: Awaited<ReturnType<typeof loadConfig>>) {
