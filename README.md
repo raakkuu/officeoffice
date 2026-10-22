@@ -8,23 +8,6 @@
 
 Turn one engineering request into a coordinated plan for specialist coding agents. **Office Office is a terminal-first tool, not a hosted web application.** Its optional local web dashboard lets you submit tasks and monitor run history. Office Office is the orchestrator—not a model or an AI subscription. You choose and configure the provider CLIs you trust.
 
-## Core feature: a coordinated AI team
-
-Office Office is built around a supervisor and specialist agents—not just a single chatbot. Michael plans work and delegates tasks to enabled specialists. The local dashboard also lets you start a bounded discussion where configured AI agents take turns responding to one another, with each reply saved in the room transcript.
-
-<p align="center">
-  <img src="docs/images/agent-communication.svg" alt="A simple Office Office collaboration map with pixel-style agent faces, specialist handoffs, and shared local project knowledge." width="100%">
-</p>
-
-### See it in the dashboard
-
-The **Team flow** section uses small pixel-style agent faces, role labels, connecting arrows, and a shared-workspace panel to make the collaboration flow easy to understand at a glance. Open the local dashboard with `office web` and look for **Team flow**.
-
-In **Rooms**, create or open a room and click **Run agent discussion** to let its enabled participants take bounded turns through their configured provider CLIs. Replies are saved locally. This is an explicit action—not a continuous background conversation—and provider usage may incur charges.
-
-Agent profiles, room records, skills, messages, and project artifacts are stored locally under `.hive/collaboration/`. Task dependency results are also passed to downstream task prompts as handoff context.
-
-
 <p align="center">
   <img src="docs/images/terminal-preview.svg" alt="Illustrative Office Office terminal workflow concept, not a live screenshot" width="100%">
 </p>
@@ -84,6 +67,22 @@ The CLI uses a pixel-inspired block-letter logo with a coral accent and a minima
 - Git recommended
 - At least one supported provider CLI installed and authenticated, or a custom CLI provider configured
 - Provider usage may incur charges depending on your account and provider
+
+## Core feature: a coordinated AI team
+
+Office Office is built around a supervisor and specialist agents—not just a single chatbot. Michael plans work and delegates tasks to enabled specialists. The local dashboard also lets you start a bounded discussion where configured AI agents take turns responding to one another, with each reply saved in the room transcript.
+
+<p align="center">
+  <img src="docs/images/agent-communication.svg" alt="A simple Office Office collaboration map with pixel-style agent faces, specialist handoffs, and shared local project knowledge." width="100%">
+</p>
+
+### See it in the dashboard
+
+The **Team flow** section uses small pixel-style agent faces, role labels, connecting arrows, and a shared-workspace panel to make the collaboration flow easy to understand at a glance. Open the local dashboard with `office web` and look for **Team flow**.
+
+In **Rooms**, create or open a room and click **Run agent discussion** to let its enabled participants take bounded turns through their configured provider CLIs. Replies are saved locally. This is an explicit action—not a continuous background conversation—and provider usage may incur charges.
+
+Agent profiles, room records, skills, messages, and project artifacts are stored locally under `.hive/collaboration/`. Task dependency results are also passed to downstream task prompts as handoff context.
 
 ## Which terminal should I use?
 
