@@ -1,7 +1,11 @@
 node_modules/
 dist/
 .env
+.env.*
+!.env.example
 office.config.json
 .hive/messages/*.json
 .hive/tasks/*.json
+.hive/runs/*.json
+.hive/memory/*.json
 .DS_Store
