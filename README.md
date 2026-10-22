@@ -10,13 +10,19 @@ Turn one engineering request into a coordinated plan for specialist coding agent
 
 ## Core feature: a coordinated AI team
 
-Office Office is built around a supervisor and specialist agents—not just a single chatbot. Michael plans the work, delegates tasks to enabled specialists, and reviews their results. The collaboration foundation stores agent profiles, bounded room conversations, handoff results, and shared project artifacts locally so the workflow stays inspectable.
+Office Office is built around a supervisor and specialist agents—not just a single chatbot. Michael plans work and delegates tasks to enabled specialists. The local dashboard also lets you start a bounded discussion where configured AI agents take turns responding to one another, with each reply saved in the room transcript.
 
 <p align="center">
-  <img src="docs/images/agent-communication.svg" alt="Visual diagram of Office Office agent collaboration: a task goes to Michael, who delegates to specialist agents that share handoffs and project knowledge stored locally." width="100%">
+  <img src="docs/images/agent-communication.svg" alt="A simple Office Office collaboration map with pixel-style agent faces, specialist handoffs, and shared local project knowledge." width="100%">
 </p>
 
-**Implementation note:** agent profiles, saved skills, room records, room messages, and project artifacts are persisted locally; prerequisite task results are passed into downstream prompts. In the dashboard, you can explicitly start a bounded AI room discussion: enabled participants take turns using their configured provider and each reply is saved to the room transcript. This is user-triggered, limited to the room's turn limit, and is not an always-running autonomous chat.
+### See it in the dashboard
+
+The **Team flow** section uses small pixel-style agent faces, role labels, connecting arrows, and a shared-workspace panel to make the collaboration flow easy to understand at a glance. Open the local dashboard with `office web` and look for **Team flow**.
+
+In **Rooms**, create or open a room and click **Run agent discussion** to let its enabled participants take bounded turns through their configured provider CLIs. Replies are saved locally. This is an explicit action—not a continuous background conversation—and provider usage may incur charges.
+
+Agent profiles, room records, skills, messages, and project artifacts are stored locally under `.hive/collaboration/`. Task dependency results are also passed to downstream task prompts as handoff context.
 
 
 <p align="center">
@@ -310,21 +316,20 @@ npm run build
 
 The GitHub Actions workflow runs these checks on Node.js 20 and 22. Tests should use mocked provider execution and must not require paid APIs or real credentials.
 
-## Agent collaboration roadmap
+## Collaboration roadmap
 
-Office Office is intended to grow from a local coding orchestrator into a local-first AI team. The requested design is documented in [Agent Collaboration Architecture](docs/agent-collaboration.md), and implementation planning is tracked in [GitHub issue #1](https://github.com/raakkuu/officeoffice/issues/1).
+The core collaboration flow is now available in the feature branch: a visual team map, user-triggered bounded AI room discussions, saved transcripts, agent profiles, and local project artifacts. The full design is documented in [Agent Collaboration Architecture](docs/agent-collaboration.md), and planning is tracked in [GitHub issue #1](https://github.com/raakkuu/officeoffice/issues/1).
 
-Planned capabilities include:
+Still planned:
 
-- **Agent-to-agent communication:** bounded room discussions now let enabled agents respond in turns through their configured provider CLIs, with persistent transcripts. Rich structured message types and automatic task-triggered agent messaging remain follow-up work.
-- **Shared project knowledge:** agents publish research, files, decisions, and test results as referenced artifacts that authorized teammates can reuse.
-- **Meeting Room:** bounded, visible multi-agent sessions with a topic, transcript, decisions, and action items.
-- **Cafeteria:** optional, user-triggered informal status exchange with session limits; it will not run an endless token-consuming conversation loop.
-- **Dynamic teams:** user-created agent profiles and Michael's bounded selection of enabled specialists when a task needs them, rather than a permanent four-agent ceiling. Skill-to-agent assignment is a follow-up.
-- **Skills library:** reusable, inspectable capabilities for engineering, testing, research, documentation, data analysis, and other domains.
-- **Controlled project memory and data access:** explicit workspace/network permissions, provenance, retention controls, and secret redaction.
+- Structured messages for questions, handoffs, progress reports, findings, and reviews.
+- Automatic task-triggered agent communication and richer handoff coordination.
+- Meeting summaries, decisions, and action items.
+- Optional Cafeteria sessions with strict limits.
+- Skill-to-agent assignment and controlled skill execution.
+- More granular workspace/network permissions, artifact provenance, retention controls, and secret redaction.
 
-**The full collaboration vision is not implemented yet.** The current foundation provides local agent profiles, skill records, bounded rooms, shared artifacts, and user-triggered AI discussions that run a limited number of provider-backed turns and save each reply. Michael's planner receives the enabled agent roster and task dependency results are passed as handoffs. Discussions are not automatic or always-on, agents do not independently launch one another, and saved skills are not automatically executed. The issue and design document remain the roadmap for richer structured handoffs, permission controls, and skill execution.
+**Current limits:** discussions only run when you click the button, stop at the room's turn limit (maximum 20 turns), and may incur provider usage charges. Agents do not run an always-on autonomous conversation, independently launch other agents, or automatically execute saved skills.
 
 ## Known limitations
 
