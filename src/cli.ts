@@ -9,18 +9,51 @@ const args = process.argv.slice(2);
 const cmd = args[0];
 const cwd = process.cwd();
 
+function printBanner() {
+  if (process.stdout.isTTY && !process.env.NO_COLOR) console.log(renderBanner());
+}
+
+function printConfig(cfg: Awaited<ReturnType<typeof loadConfig>>) {
+  if (args.includes('--json')) {
+    console.log(JSON.stringify({
+      ...cfg,
+      providers: cfg.providers.map(provider => ({ ...provider, env: undefined }))
+    }, null, 2));
+    return;
+  }
+
+  console.log('Office Office configuration');
+  console.log('---------------------------');
+  console.log(`Supervisor:       ${cfg.supervisor}`);
+  console.log(`Workspace:        ${cfg.workspace}`);
+  console.log(`Max parallel:     ${cfg.maxParallel}`);
+  console.log(`Auto commit:      ${cfg.autoCommit ? 'enabled' : 'disabled'}`);
+  console.log(`Dashboard port:   ${cfg.webPort}`);
+  console.log('\nWorker assignments:');
+  for (const [agent, provider] of Object.entries(cfg.workers)) {
+    console.log(`  ${agent.padEnd(12)} ${provider}`);
+  }
+  console.log('\nProviders:');
+  for (const provider of cfg.providers) {
+    const enabled = provider.enabled === false ? 'disabled' : 'enabled';
+    console.log(`  ${provider.id.padEnd(12)} ${provider.kind.padEnd(8)} ${enabled} · command: ${provider.command}`);
+  }
+  console.log('\nFor the complete machine-readable configuration, run: office config --json');
+  console.log('Secrets and provider environment values are not displayed.');
+}
+
 async function main() {
-  // Help and agent-list commands must work without loading configuration or contacting providers.
+  // The logo is reserved for help/first-run discovery; operational commands stay concise.
   if (!cmd || cmd === 'help' || cmd === '--help' || cmd === '-h') {
-    console.log(renderBanner());
-    console.log(`
-Usage:
+    printBanner();
+    console.log(`\nUsage:
   office "Build authentication"
   office agents  (or: office agent)
   office doctor
   office status
   office web
   office config
+  office config --json
   office config set supervisor <provider-id>
 
 Help and the agent list do not require provider authentication.
@@ -30,40 +63,38 @@ Provider API keys are only needed when the selected provider requires them.
   }
 
   if (cmd === 'agents' || cmd === 'agent') {
-    console.log(renderBanner());
     console.log('\nAgents:');
     console.log('  michael  Supervisor / planner');
     console.log('  dwight   Backend / systems');
     console.log('  pam      Frontend / UX');
     console.log('  jim      Testing / review');
+    console.log('\nThe default roster is configurable; dynamic agent creation is planned, not yet implemented.');
     return;
   }
 
   const cfg = await loadConfig(cwd);
 
   if (cmd === 'doctor') {
-    console.log(renderBanner());
-    console.log('\nOffice Office doctor\n');
+    console.log('Office Office doctor\n');
     console.log(`Node: ${process.version}`);
     console.log(`Git repo: ${(await isGitRepo(cwd)) ? 'yes' : 'no'}`);
     for (const p of cfg.providers) {
       const d = await providerDoctor(p);
       console.log(`${p.id.padEnd(8)} ${d.installed ? '✓ installed' : '✗ missing'}  ${d.apiKey ? 'API key detected' : 'API key not detected'}`);
     }
-    console.log('\nAPI keys are never written to the project or Hive.');
+    console.log('\nThis checks executable/key presence; it does not prove that a provider can authenticate or make a successful request.');
+    console.log('API keys are never written to the project or Hive.');
     return;
   }
 
   if (cmd === 'status') {
-    console.log(renderBanner());
-    console.log('\n' + ((await status(cwd)).stdout || 'Working tree clean.'));
+    console.log((await status(cwd)).stdout || 'Working tree clean.');
     return;
   }
 
   if (cmd === 'web') {
-    console.log(renderBanner());
     const server = await startServer(cwd, cfg.webPort);
-    console.log(`\nOffice Office UI: http://127.0.0.1:${cfg.webPort}`);
+    console.log(`Office Office UI: http://127.0.0.1:${cfg.webPort}`);
     console.log('Local dashboard only. Press Ctrl+C to stop.\n');
     await new Promise<void>(resolve => process.on('SIGINT', () => {
       server.close().then(() => resolve());
@@ -89,7 +120,7 @@ Provider API keys are only needed when the selected provider requires them.
       process.exitCode = 1;
       return;
     }
-    console.log(JSON.stringify({ ...cfg, providers: cfg.providers.map(p => ({ ...p, env: undefined })) }, null, 2));
+    printConfig(cfg);
     return;
   }
 
@@ -100,7 +131,6 @@ Provider API keys are only needed when the selected provider requires them.
     return;
   }
 
-  console.log(renderBanner());
   const orchestrator = new Orchestrator(cfg, cwd, output => {
     process.stdout.write(output.endsWith('\n') ? output : output + '\n');
   });
