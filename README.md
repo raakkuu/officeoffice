@@ -8,6 +8,23 @@
 
 Turn one engineering request into a coordinated plan for specialist coding agents. **Office Office is a terminal-first tool, not a hosted web application.** Its optional local web dashboard lets you submit tasks and monitor run history. Office Office is the orchestrator—not a model or an AI subscription. You choose and configure the provider CLIs you trust.
 
+## Core feature: a coordinated AI team
+
+Office Office is built around a supervisor and specialist agents—not just a single chatbot. Michael plans work and delegates tasks to enabled specialists. The local dashboard also lets you start a bounded discussion where configured AI agents take turns responding to one another, with each reply saved in the room transcript.
+
+<p align="center">
+  <img src="docs/images/agent-communication.svg" alt="A simple Office Office collaboration map with pixel-style agent faces, specialist handoffs, and shared local project knowledge." width="100%">
+</p>
+
+### See it in the dashboard
+
+The **Team flow** section uses small pixel-style agent faces, role labels, connecting arrows, and a shared-workspace panel to make the collaboration flow easy to understand at a glance. Open the local dashboard with `office web` and look for **Team flow**.
+
+In **Rooms**, create or open a room and click **Run agent discussion** to let its enabled participants take bounded turns through their configured provider CLIs. Replies are saved locally. This is an explicit action—not a continuous background conversation—and provider usage may incur charges.
+
+Agent profiles, room records, skills, messages, and project artifacts are stored locally under `.hive/collaboration/`. Task dependency results are also passed to downstream task prompts as handoff context.
+
+
 <p align="center">
   <img src="docs/images/terminal-preview.svg" alt="Illustrative Office Office terminal workflow concept, not a live screenshot" width="100%">
 </p>
@@ -26,13 +43,13 @@ Turn one engineering request into a coordinated plan for specialist coding agent
 - A concise CLI experience: the pixel logo is shown for help/discovery rather than repeated before every operational command.
 - Human-readable `office config` output, with `office config --json` available for scripting.
 - Persistent task and run history in the local `.hive/` directory.
-- Optional responsive local web dashboard with a task composer and run tracking.
+- Optional responsive local web dashboard with task submission, dynamic agent profiles, saved skills, collaboration rooms, shared project artifacts, and run tracking.
 - Provider adapters for Claude Code, Codex CLI, Gemini CLI, Ollama, and custom CLI configurations.
 - Node.js-based process execution; no native PTY dependency is required.
 
 ## Optional web dashboard
 
-The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. Navigation currently covers Overview, New task, Agents, Run history, and Workspace health; agent cards represent the built-in roster, not yet a dynamic agent manager. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
+The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. The dashboard includes Overview, task submission, built-in and user-created agent profiles, a pixel-style team-flow map, Meeting Room/Cafeteria room records, bounded AI discussions, a local skills library, shared project knowledge/artifacts, Run history, and Workspace health. Room discussions are explicitly started by you and use configured provider CLIs; they stop at the room's turn limit. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
 
 ## Terminal identity
 
@@ -68,9 +85,56 @@ The CLI uses a pixel-inspired block-letter logo with a coral accent and a minima
 - At least one supported provider CLI installed and authenticated, or a custom CLI provider configured
 - Provider usage may incur charges depending on your account and provider
 
-## Install from source
+## Which terminal should I use?
 
-Clone the repository and install dependencies:
+**You do not need a different terminal for each command.** Open one terminal, run the commands for your operating system in order, and keep using that same terminal. The commands inside each code block are meant to be run one line at a time, from top to bottom. You only need another terminal window if you want to run a separate task at the same time.
+
+- **Windows:** use PowerShell or Command Prompt (CMD). The Windows install section below works with either unless it specifically says otherwise.
+- **macOS / Linux:** use the Terminal app and a Bash/Zsh-compatible shell.
+- **Android:** use the Termux app; ordinary Android apps such as the browser are not terminals.
+- **Inside the Office Office repository folder:** run project commands such as `npm install`, `npm run check`, `npm test`, and `npm run build`.
+- **What the commands mean:** `git clone` downloads the repository, `cd officeoffice` enters its folder, `npm install` installs project dependencies, `npm run check` checks the code, `npm test` runs tests, and `npm run build` builds the project. Use `npm install`—not `npm get`.
+
+Installing Office Office is separate from installing an AI provider. After Office Office is built, install and sign in to whichever provider CLI you want to use by following that provider's official instructions. You do not need to install every provider. The provider CLI must be available in the same environment where you run Office Office.
+
+## Install from source (Windows, macOS, Linux, and Termux)
+
+Office Office needs **Node.js 20+** and Git. Commands below are for a fresh install. Use the section after this one to update an existing checkout without losing your work.
+
+### Windows — Command Prompt (CMD) or PowerShell
+
+Install Git and Node.js if they are missing (using Windows Package Manager):
+
+```powershell
+winget install --id Git.Git -e
+winget install --id OpenJS.NodeJS.LTS -e
+```
+
+Close and reopen the terminal, then check versions:
+
+```cmd
+git --version
+node --version
+npm --version
+```
+
+Clone and build (these commands work in CMD and PowerShell):
+
+```cmd
+git clone https://github.com/raakkuu/officeoffice.git
+cd officeoffice
+npm install
+npm run check
+npm test
+npm run build
+npm link
+```
+
+If Windows asks for administrator permission for `npm link`, reopen the terminal with the appropriate permission or use the project locally with `npm run dev` if that script is available. Do not run commands from inside a different project directory.
+
+### macOS or Linux terminal
+
+Install Git and Node.js 20+ using your operating system's package manager or the official installers, then run:
 
 ```bash
 git clone https://github.com/raakkuu/officeoffice.git
@@ -81,6 +145,31 @@ npm test
 npm run build
 npm link
 ```
+
+For Ubuntu/Debian, `sudo apt install git` installs Git, but the distribution's Node.js package may be older than version 20; verify `node --version` and use a current Node.js 20+ installation.
+
+### Android — Termux
+
+Install Termux from a trusted source such as F-Droid or the official Termux GitHub releases. In Termux, run:
+
+```bash
+pkg update
+pkg upgrade
+pkg install git nodejs-lts
+git --version
+node --version
+npm --version
+git clone https://github.com/raakkuu/officeoffice.git
+cd officeoffice
+npm install
+npm run check
+npm test
+npm run build
+```
+
+Termux package availability can vary. If `nodejs-lts` is unavailable, run `pkg search nodejs` and install the current supported Node.js package. You can run the CLI inside Termux; provider CLIs (Claude Code, Codex, Gemini, or other providers) must separately support Android/Termux and be installed/authenticated there. Some providers may not support Termux.
+
+After building, use `npm link` where supported to expose the `office` command globally. If global linking is unavailable, run the CLI through the repository's documented npm scripts or use the project-local binary after checking `package.json` scripts.
 
 Then check your environment and inspect the available commands:
 
@@ -182,7 +271,53 @@ officeoffice/
 
 Read [SECURITY.md](SECURITY.md) to report a potential vulnerability.
 
-## Development and checks
+## Updating an existing checkout safely (keep changes synchronized)
+
+**Run these steps in order, one at a time.** Updating Git itself does not update Office Office. These steps update the repository code from GitHub.
+
+1. Open the terminal in your Office Office repository folder.
+2. Check for local edits before pulling:
+
+```bash
+git status
+git branch --show-current
+```
+
+3. If you have changes you want to keep, commit them or stash them before continuing. Do not overwrite uncommitted work.
+4. Switch to the branch you want to update and pull its latest commits. For the stable version, use `main`:
+
+```bash
+git switch main
+git pull --ff-only origin main
+```
+
+To test the collaboration work before it is merged, use `git switch feat/agent-collaboration` and then `git pull --ff-only origin feat/agent-collaboration` instead. That branch may change while the pull request is being reviewed.
+
+5. Install dependencies, check, test, and build in order:
+
+```bash
+npm install
+npm run check
+npm test
+npm run build
+```
+
+6. If you originally used `npm link` for a source install, relink after the build if your environment requires it:
+
+```bash
+npm link
+```
+
+7. Verify the command points to the updated install:
+
+```bash
+office --help
+office doctor
+```
+
+If `git pull` says you have divergent branches or local changes, stop and resolve that before running a reset. **Do not use `git reset --hard` as a routine update command**—it can delete local work. If you downloaded a ZIP instead of cloning with Git, download/extract the new version separately and migrate your local configuration/workspace carefully rather than running `git pull`.
+
+### Development and checks
 
 ```bash
 npm install
@@ -193,21 +328,20 @@ npm run build
 
 The GitHub Actions workflow runs these checks on Node.js 20 and 22. Tests should use mocked provider execution and must not require paid APIs or real credentials.
 
-## Agent collaboration roadmap
+## Collaboration roadmap
 
-Office Office is intended to grow from a local coding orchestrator into a local-first AI team. The requested design is documented in [Agent Collaboration Architecture](docs/agent-collaboration.md), and implementation planning is tracked in [GitHub issue #1](https://github.com/raakkuu/officeoffice/issues/1).
+The core collaboration flow is now available in the feature branch: a visual team map, user-triggered bounded AI room discussions, saved transcripts, agent profiles, and local project artifacts. The full design is documented in [Agent Collaboration Architecture](docs/agent-collaboration.md), and planning is tracked in [GitHub issue #1](https://github.com/raakkuu/officeoffice/issues/1).
 
-Planned capabilities include:
+Still planned:
 
-- **Agent-to-agent communication:** persistent, structured messages for questions, handoffs, progress, findings, and reviews.
-- **Shared project knowledge:** agents publish research, files, decisions, and test results as referenced artifacts that authorized teammates can reuse.
-- **Meeting Room:** bounded, visible multi-agent sessions with a topic, transcript, decisions, and action items.
-- **Cafeteria:** optional, user-triggered informal status exchange with session limits; it will not run an endless token-consuming conversation loop.
-- **Dynamic teams:** user-created agent profiles, assignable skills, and Michael's bounded selection of specialists when a task needs them, rather than a permanent four-agent ceiling.
-- **Skills library:** reusable, inspectable capabilities for engineering, testing, research, documentation, data analysis, and other domains.
-- **Controlled project memory and data access:** explicit workspace/network permissions, provenance, retention controls, and secret redaction.
+- Structured messages for questions, handoffs, progress reports, findings, and reviews.
+- Automatic task-triggered agent communication and richer handoff coordination.
+- Meeting summaries, decisions, and action items.
+- Optional Cafeteria sessions with strict limits.
+- Skill-to-agent assignment and controlled skill execution.
+- More granular workspace/network permissions, artifact provenance, retention controls, and secret redaction.
 
-**These collaboration features are planned, not implemented yet.** The current release still uses a built-in agent roster and does not yet provide a persistent agent message bus, shared artifact registry, meeting rooms, cafeteria sessions, or dynamic agent creation. The issue and design document are specifications, not proof of working features.
+**Current limits:** discussions only run when you click the button, stop at the room's turn limit (maximum 20 turns), and may incur provider usage charges. Agents do not run an always-on autonomous conversation, independently launch other agents, or automatically execute saved skills.
 
 ## Known limitations
 
@@ -216,6 +350,9 @@ Planned capabilities include:
 - The dashboard is local-first and currently has no user login or multi-user access control.
 - The dashboard run guard applies to a single running server process; it is not a cross-process job lock.
 - Runtime state is local to the workspace and is not a hosted team database.
+- Collaboration data is saved in `.hive/collaboration/`; back it up with care and review it before sharing.
+- User-created agent profiles must reference a provider ID present in the local configuration. Profile creation does not install or authenticate that provider.
+- Room messages and shared artifacts are local project data; avoid putting credentials or sensitive information in them.
 - `office doctor` checks provider executable/key presence; it does not make a live authenticated request to each provider.
 - Updating GitHub does not update an existing local installation automatically. Source installs must pull changes and rebuild/relink as appropriate; packaged installs must install a newer release.
 

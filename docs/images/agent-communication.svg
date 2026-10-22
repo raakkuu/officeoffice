@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420" role="img" aria-labelledby="title desc">
+<title id="title">Office Office agent collaboration</title>
+<desc id="desc">A minimal dashboard-style map showing Michael coordinating three pixel-art specialist agents, with data handoffs flowing into a shared local project workspace.</desc>
+<defs><style>
+.bg{fill:#f5f0e7}.panel{fill:#fffdf8;stroke:#e6ded2;stroke-width:2}.ink{fill:#24221f;font-family:Inter,ui-sans-serif,system-ui,sans-serif}.muted{fill:#817b72;font-family:Inter,ui-sans-serif,system-ui,sans-serif}.head{font-size:27px;font-weight:750}.sub{font-size:14px}.name{font-size:16px;font-weight:750}.role{font-size:12px}.flow{fill:none;stroke:#c39a52;stroke-width:3;stroke-linecap:round;stroke-dasharray:5 7}.pixel{shape-rendering:crispEdges}
+</style></defs>
+<rect width="1100" height="420" rx="20" class="bg"/>
+<text x="34" y="44" class="ink head">Your agents, working as a team</text>
+<text x="35" y="69" class="muted sub">A request becomes specialist tasks, handoffs and shared project knowledge.</text>
+<rect x="30" y="94" width="1040" height="238" rx="18" class="panel"/>
+<g transform="translate(56 126)">
+<rect width="192" height="164" rx="14" fill="#f4e9e8" stroke="#e6c7c9"/>
+<g class="pixel" transform="translate(69 20)">
+<rect width="54" height="54" rx="6" fill="#8d2938"/>
+<rect x="9" y="9" width="9" height="9" fill="#fffdf8"/><rect x="36" y="9" width="9" height="9" fill="#fffdf8"/>
+<rect x="9" y="27" width="9" height="9" fill="#fffdf8"/><rect x="18" y="36" width="18" height="9" fill="#fffdf8"/><rect x="36" y="27" width="9" height="9" fill="#fffdf8"/>
+</g>
+<text x="96" y="98" text-anchor="middle" class="ink name">Michael</text><text x="96" y="119" text-anchor="middle" class="muted role">Supervisor</text><text x="96" y="142" text-anchor="middle" class="ink role">Plans + delegates</text>
+</g>
+<path d="M262 208 H310 M310 208 V162 H346 M310 208 H346 M310 208 V254 H346" class="flow"/>
+<g transform="translate(346 116)">
+<rect width="184" height="62" rx="12" fill="#eef5f8" stroke="#c8dfe8"/>
+<g class="pixel" transform="translate(14 13)"><rect width="36" height="36" rx="4" fill="#3e7188"/><rect x="7" y="7" width="7" height="7" fill="#fffdf8"/><rect x="22" y="7" width="7" height="7" fill="#fffdf8"/><rect x="7" y="22" width="22" height="7" fill="#fffdf8"/></g>
+<text x="62" y="27" class="ink name">Dwight</text><text x="62" y="45" class="muted role">Backend + systems</text>
+</g>
+<g transform="translate(346 192)">
+<rect width="184" height="62" rx="12" fill="#f5effb" stroke="#e0d1f0"/>
+<g class="pixel" transform="translate(14 13)"><rect width="36" height="36" rx="4" fill="#8b69b1"/><rect x="7" y="7" width="7" height="7" fill="#fffdf8"/><rect x="22" y="7" width="7" height="7" fill="#fffdf8"/><rect x="7" y="22" width="22" height="7" fill="#fffdf8"/></g>
+<text x="62" y="27" class="ink name">Pam</text><text x="62" y="45" class="muted role">Frontend + UX</text>
+</g>
+<g transform="translate(346 268)">
+<rect width="184" height="48" rx="12" fill="#edf6ef" stroke="#cde4d2"/>
+<g class="pixel" transform="translate(14 7)"><rect width="34" height="34" rx="4" fill="#668b67"/><rect x="7" y="7" width="6" height="6" fill="#fffdf8"/><rect x="21" y="7" width="6" height="6" fill="#fffdf8"/><rect x="7" y="21" width="20" height="6" fill="#fffdf8"/></g>
+<text x="62" y="21" class="ink name">Jim</text><text x="62" y="37" class="muted role">Testing + quality</text>
+</g>
+<path d="M542 147 H590 M542 223 H590 M542 292 H590 M590 147 V292 M590 223 H631" class="flow"/>
+<g transform="translate(631 146)">
+<rect width="202" height="130" rx="14" fill="#fbf4e6" stroke="#e8d7b5"/>
+<g transform="translate(77 18)" class="pixel"><rect width="48" height="42" rx="5" fill="#c39a52"/><rect x="8" y="8" width="7" height="7" fill="#fffdf8"/><rect x="33" y="8" width="7" height="7" fill="#fffdf8"/><rect x="8" y="24" width="32" height="7" fill="#fffdf8"/></g>
+<text x="101" y="82" text-anchor="middle" class="ink name">Shared workspace</text><text x="101" y="101" text-anchor="middle" class="muted role">Handoffs + findings</text><text x="101" y="117" text-anchor="middle" class="muted role">Stored locally</text>
+</g>
+<path d="M845 211 H876" class="flow"/>
+<g transform="translate(876 153)">
+<rect width="166" height="116" rx="14" fill="#f7f5f0" stroke="#e6ded2"/>
+<text x="83" y="30" text-anchor="middle" class="ink name">You stay in control</text>
+<text x="83" y="55" text-anchor="middle" class="muted role">Inspect the work</text>
+<text x="83" y="74" text-anchor="middle" class="muted role">Review results</text>
+<text x="83" y="93" text-anchor="middle" class="muted role">Run locally</text>
+</g>
+<text x="36" y="370" class="ink sub" font-weight="700">Now supported</text><text x="36" y="392" class="muted sub">Delegated tasks, prerequisite handoffs, saved room conversations and shared project notes.</text>
+<text x="1064" y="370" text-anchor="end" class="ink sub" font-weight="700">Bounded AI room discussions</text><text x="1064" y="392" text-anchor="end" class="muted sub">Each reply uses your configured provider and may incur provider usage charges.</text>
+</svg>
