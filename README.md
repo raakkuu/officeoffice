@@ -16,7 +16,7 @@ Office Office is built around a supervisor and specialist agents—not just a si
   <img src="docs/images/agent-communication.svg" alt="Visual diagram of Office Office agent collaboration: a task goes to Michael, who delegates to specialist agents that share handoffs and project knowledge stored locally." width="100%">
 </p>
 
-**Implementation note:** the diagram shows the intended collaboration workflow. Agent profiles, saved skills, room records, manual room messages, and project artifacts are persisted locally; task dependency results are passed into downstream prompts. Fully autonomous agent-to-agent chat and AI-facilitated meetings are not implemented yet.
+**Implementation note:** agent profiles, saved skills, room records, room messages, and project artifacts are persisted locally; prerequisite task results are passed into downstream prompts. In the dashboard, you can explicitly start a bounded AI room discussion: enabled participants take turns using their configured provider and each reply is saved to the room transcript. This is user-triggered, limited to the room's turn limit, and is not an always-running autonomous chat.
 
 
 <p align="center">
@@ -43,7 +43,7 @@ Office Office is built around a supervisor and specialist agents—not just a si
 
 ## Optional web dashboard
 
-The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. The dashboard includes Overview, task submission, built-in and user-created agent profiles, Meeting Room/Cafeteria room records with persisted messages, a local skills library, shared project knowledge/artifacts, Run history, and Workspace health. Rooms are bounded and persisted, but agent-to-agent autonomous conversation and AI-facilitated meetings are not yet implemented. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
+The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. The dashboard includes Overview, task submission, built-in and user-created agent profiles, a pixel-style team-flow map, Meeting Room/Cafeteria room records, bounded AI discussions, a local skills library, shared project knowledge/artifacts, Run history, and Workspace health. Room discussions are explicitly started by you and use configured provider CLIs; they stop at the room's turn limit. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
 
 ## Terminal identity
 
@@ -316,7 +316,7 @@ Office Office is intended to grow from a local coding orchestrator into a local-
 
 Planned capabilities include:
 
-- **Agent-to-agent communication:** persistent, structured messages for questions, handoffs, progress, findings, and reviews.
+- **Agent-to-agent communication:** bounded room discussions now let enabled agents respond in turns through their configured provider CLIs, with persistent transcripts. Rich structured message types and automatic task-triggered agent messaging remain follow-up work.
 - **Shared project knowledge:** agents publish research, files, decisions, and test results as referenced artifacts that authorized teammates can reuse.
 - **Meeting Room:** bounded, visible multi-agent sessions with a topic, transcript, decisions, and action items.
 - **Cafeteria:** optional, user-triggered informal status exchange with session limits; it will not run an endless token-consuming conversation loop.
@@ -324,7 +324,7 @@ Planned capabilities include:
 - **Skills library:** reusable, inspectable capabilities for engineering, testing, research, documentation, data analysis, and other domains.
 - **Controlled project memory and data access:** explicit workspace/network permissions, provenance, retention controls, and secret redaction.
 
-**The full collaboration vision is not implemented yet.** The current collaboration foundation provides locally persisted agent profiles, skill records, bounded Meeting Room/Cafeteria records, user-posted room messages, and shared project artifacts through the local dashboard API. Michael's planner is supplied the enabled agent roster and tasks are assigned to configured agent profiles. Room messages are currently manual: agents do not yet autonomously send messages to each other, meetings do not automatically invoke AI participants, and skills are stored as reusable instructions but are not automatically executed. The issue and design document remain the roadmap for those next capabilities.
+**The full collaboration vision is not implemented yet.** The current foundation provides local agent profiles, skill records, bounded rooms, shared artifacts, and user-triggered AI discussions that run a limited number of provider-backed turns and save each reply. Michael's planner receives the enabled agent roster and task dependency results are passed as handoffs. Discussions are not automatic or always-on, agents do not independently launch one another, and saved skills are not automatically executed. The issue and design document remain the roadmap for richer structured handoffs, permission controls, and skill execution.
 
 ## Known limitations
 
