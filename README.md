@@ -8,6 +8,17 @@
 
 Turn one engineering request into a coordinated plan for specialist coding agents. **Office Office is a terminal-first tool, not a hosted web application.** Its optional local web dashboard lets you submit tasks and monitor run history. Office Office is the orchestrator—not a model or an AI subscription. You choose and configure the provider CLIs you trust.
 
+## Core feature: a team of AI agents that works together
+
+Office Office is built around **delegation and shared context**: Michael coordinates specialist agents, task dependencies pass findings forward, and shared project knowledge keeps the work organized.
+
+<p align="center">
+  <img src="docs/images/agent-communication.svg" alt="Visual diagram of Office Office agent collaboration: Michael coordinates specialist agents, handoff notes and shared project knowledge connect their work, and results return for review." width="100%">
+</p>
+
+> **Current status:** the local collaboration foundation supports agent profiles, saved skills, bounded rooms with manual messages, shared artifacts, and passing prerequisite task results into downstream prompts. Fully autonomous agent-to-agent conversations and AI-led meetings are still planned—not yet available.
+
+
 <p align="center">
   <img src="docs/images/terminal-preview.svg" alt="Illustrative Office Office terminal workflow concept, not a live screenshot" width="100%">
 </p>
@@ -29,14 +40,6 @@ Turn one engineering request into a coordinated plan for specialist coding agent
 - Optional responsive local web dashboard with task submission, dynamic agent profiles, saved skills, collaboration rooms, shared project artifacts, and run tracking.
 - Provider adapters for Claude Code, Codex CLI, Gemini CLI, Ollama, and custom CLI configurations.
 - Node.js-based process execution; no native PTY dependency is required.
-
-## Agent-to-agent communication (visual guide)
-
-<p align="center">
-  <img src="docs/images/agent-communication.svg" alt="Office Office agent collaboration: Michael delegates to specialists who share bounded handoff notes and project knowledge, with state stored locally." width="100%">
-</p>
-
-The diagram shows the intended collaboration model: a supervisor delegates work, specialist agents pass findings through task dependencies and shared artifacts, and the results are reviewed. **Current implementation status matters:** profiles, saved skills, room records, manual room messages, and project artifacts are persisted locally; task dependency results are passed into downstream prompts. Autonomous agent-to-agent conversations and AI-facilitated meetings are not available yet.
 
 ## Optional web dashboard
 
