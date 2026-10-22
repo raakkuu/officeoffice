@@ -26,13 +26,13 @@ Turn one engineering request into a coordinated plan for specialist coding agent
 - A concise CLI experience: the pixel logo is shown for help/discovery rather than repeated before every operational command.
 - Human-readable `office config` output, with `office config --json` available for scripting.
 - Persistent task and run history in the local `.hive/` directory.
-- Optional responsive local web dashboard with a task composer and run tracking.
+- Optional responsive local web dashboard with task submission, dynamic agent profiles, saved skills, collaboration rooms, shared project artifacts, and run tracking.
 - Provider adapters for Claude Code, Codex CLI, Gemini CLI, Ollama, and custom CLI configurations.
 - Node.js-based process execution; no native PTY dependency is required.
 
 ## Optional web dashboard
 
-The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. Navigation currently covers Overview, New task, Agents, Run history, and Workspace health; agent cards represent the built-in roster, not yet a dynamic agent manager. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
+The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. The dashboard includes Overview, task submission, built-in and user-created agent profiles, Meeting Room/Cafeteria room records with persisted messages, a local skills library, shared project knowledge/artifacts, Run history, and Workspace health. Rooms are bounded and persisted, but agent-to-agent autonomous conversation and AI-facilitated meetings are not yet implemented. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
 
 ## Terminal identity
 
@@ -207,7 +207,7 @@ Planned capabilities include:
 - **Skills library:** reusable, inspectable capabilities for engineering, testing, research, documentation, data analysis, and other domains.
 - **Controlled project memory and data access:** explicit workspace/network permissions, provenance, retention controls, and secret redaction.
 
-**These collaboration features are planned, not implemented yet.** The current release still uses a built-in agent roster and does not yet provide a persistent agent message bus, shared artifact registry, meeting rooms, cafeteria sessions, or dynamic agent creation. The issue and design document are specifications, not proof of working features.
+**These collaboration features are planned, not implemented yet.** The collaboration implementation now provides locally persisted agent profiles, skill records, bounded Meeting Room/Cafeteria records, user-posted room messages, and shared project artifacts through the local dashboard API. Michael's planner is supplied the enabled agent roster and tasks are assigned to configured agent profiles. Room messages are currently manual: agents do not yet autonomously send messages to each other, meetings do not automatically invoke AI participants, and skills are stored as reusable instructions but are not automatically executed. The issue and design document remain the roadmap for those next capabilities.
 
 ## Known limitations
 
@@ -216,6 +216,9 @@ Planned capabilities include:
 - The dashboard is local-first and currently has no user login or multi-user access control.
 - The dashboard run guard applies to a single running server process; it is not a cross-process job lock.
 - Runtime state is local to the workspace and is not a hosted team database.
+- Collaboration data is saved in `.hive/collaboration/`; back it up with care and review it before sharing.
+- User-created agent profiles must reference a provider ID present in the local configuration. Profile creation does not install or authenticate that provider.
+- Room messages and shared artifacts are local project data; avoid putting credentials or sensitive information in them.
 - `office doctor` checks provider executable/key presence; it does not make a live authenticated request to each provider.
 - Updating GitHub does not update an existing local installation automatically. Source installs must pull changes and rebuild/relink as appropriate; packaged installs must install a newer release.
 
