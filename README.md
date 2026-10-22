@@ -32,6 +32,32 @@ Turn one engineering request into a coordinated plan for specialist coding agent
 
 The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
 
+## Terminal identity
+
+Office Office includes a compact symbolic agent diagram in its CLI help, agent list, task startup, and dashboard startup. It is a terminal-native illustration of the real workflow—not a cloud service diagram or a screenshot of a completed run. ANSI accent colors are enabled only for interactive terminals and can be disabled with `NO_COLOR`.
+
+```text
+   ╭──────────────────────────────────────────────────────╮
+   │  ◈  OFFICE OFFICE  LOCAL-FIRST AGENT ORCHESTRATION   │
+   ╰──────────────────────────────────────────────────────╯
+
+                      .────────────.
+                  .───(   MICHAEL    )───.
+                  │     plan + review    │
+                  ╰─────────┬───────────╯
+             ┌───────────────┼───────────────┐
+             ▼               ▼               ▼
+       ┌──────────┐    ┌──────────┐    ┌──────────┐
+       │  DWIGHT  │    │   PAM    │    │   JIM    │
+       │ backend  │    │ frontend │    │   tests  │
+       └────┬─────┘    └────┬─────┘    └────┬─────┘
+            ╰───────────────┼───────────────╯
+                            ▼
+                  [ results • review • done ]
+```
+
+The diagram communicates the intended flow. Actual task execution and completion still depend on your configured providers and the task plan they return.
+
 ## How it works
 
 <p align="center">
