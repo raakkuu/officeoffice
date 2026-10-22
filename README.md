@@ -19,17 +19,6 @@ Office Office is built around a supervisor and specialist agents—not just a si
 **Implementation note:** the diagram shows the intended collaboration workflow. Agent profiles, saved skills, room records, manual room messages, and project artifacts are persisted locally; task dependency results are passed into downstream prompts. Fully autonomous agent-to-agent chat and AI-facilitated meetings are not implemented yet.
 
 
-## Core feature: a team of AI agents that works together
-
-Office Office is built around **delegation and shared context**: Michael coordinates specialist agents, task dependencies pass findings forward, and shared project knowledge keeps the work organized.
-
-<p align="center">
-  <img src="docs/images/agent-communication.svg" alt="Visual diagram of Office Office agent collaboration: Michael coordinates specialist agents, handoff notes and shared project knowledge connect their work, and results return for review." width="100%">
-</p>
-
-> **Current status:** the local collaboration foundation supports agent profiles, saved skills, bounded rooms with manual messages, shared artifacts, and passing prerequisite task results into downstream prompts. Fully autonomous agent-to-agent conversations and AI-led meetings are still planned—not yet available.
-
-
 <p align="center">
   <img src="docs/images/terminal-preview.svg" alt="Illustrative Office Office terminal workflow concept, not a live screenshot" width="100%">
 </p>
