@@ -21,8 +21,10 @@ Turn one engineering request into a coordinated plan for specialist coding agent
 - **Michael** plans and coordinates the work.
 - **Dwight** specializes in backend and systems tasks.
 - **Pam** specializes in frontend and user experience.
-- **Jim** focuses on testing and quality.
+- **Jim** focuses on testing and quality in the current default team.
 - Dependency-aware scheduling with configurable parallelism.
+- A concise CLI experience: the pixel logo is shown for help/discovery rather than repeated before every operational command.
+- Human-readable `office config` output, with `office config --json` available for scripting.
 - Persistent task and run history in the local `.hive/` directory.
 - Optional responsive local web dashboard with a task composer and run tracking.
 - Provider adapters for Claude Code, Codex CLI, Gemini CLI, Ollama, and custom CLI configurations.
@@ -30,7 +32,7 @@ Turn one engineering request into a coordinated plan for specialist coding agent
 
 ## Optional web dashboard
 
-The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
+The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. Navigation currently covers Overview, New task, Agents, Run history, and Workspace health; agent cards represent the built-in roster, not yet a dynamic agent manager. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
 
 ## Terminal identity
 
@@ -143,7 +145,8 @@ Ollama can run local models. Make sure the Ollama CLI and selected model are ins
 | `office doctor` | Check Node, Git, provider executables, and key visibility |
 | `office status` | Show Git status for the current directory |
 | `office web` | Start the local dashboard |
-| `office config` | Print configuration with provider environment values omitted |
+| `office config` | Show a human-readable configuration summary without secrets |
+| `office config --json` | Print machine-readable configuration with provider environment values omitted |
 | `office config set supervisor <provider-id>` | Change the configured supervisor |
 | `office "<task>"` | Run a coding task |
 
@@ -190,6 +193,22 @@ npm run build
 
 The GitHub Actions workflow runs these checks on Node.js 20 and 22. Tests should use mocked provider execution and must not require paid APIs or real credentials.
 
+## Agent collaboration roadmap
+
+Office Office is intended to grow from a local coding orchestrator into a local-first AI team. The requested design is documented in [Agent Collaboration Architecture](docs/agent-collaboration.md), and implementation planning is tracked in [GitHub issue #1](https://github.com/raakkuu/officeoffice/issues/1).
+
+Planned capabilities include:
+
+- **Agent-to-agent communication:** persistent, structured messages for questions, handoffs, progress, findings, and reviews.
+- **Shared project knowledge:** agents publish research, files, decisions, and test results as referenced artifacts that authorized teammates can reuse.
+- **Meeting Room:** bounded, visible multi-agent sessions with a topic, transcript, decisions, and action items.
+- **Cafeteria:** optional, user-triggered informal status exchange with session limits; it will not run an endless token-consuming conversation loop.
+- **Dynamic teams:** user-created agent profiles, assignable skills, and Michael's bounded selection of specialists when a task needs them, rather than a permanent four-agent ceiling.
+- **Skills library:** reusable, inspectable capabilities for engineering, testing, research, documentation, data analysis, and other domains.
+- **Controlled project memory and data access:** explicit workspace/network permissions, provenance, retention controls, and secret redaction.
+
+**These collaboration features are planned, not implemented yet.** The current release still uses a built-in agent roster and does not yet provide a persistent agent message bus, shared artifact registry, meeting rooms, cafeteria sessions, or dynamic agent creation. The issue and design document are specifications, not proof of working features.
+
 ## Known limitations
 
 - Agent quality, tool access, and costs depend on the configured provider and its CLI permissions.
@@ -197,6 +216,8 @@ The GitHub Actions workflow runs these checks on Node.js 20 and 22. Tests should
 - The dashboard is local-first and currently has no user login or multi-user access control.
 - The dashboard run guard applies to a single running server process; it is not a cross-process job lock.
 - Runtime state is local to the workspace and is not a hosted team database.
+- `office doctor` checks provider executable/key presence; it does not make a live authenticated request to each provider.
+- Updating GitHub does not update an existing local installation automatically. Source installs must pull changes and rebuild/relink as appropriate; packaged installs must install a newer release.
 
 ## Contributing
 
