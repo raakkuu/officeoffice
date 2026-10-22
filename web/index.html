@@ -60,7 +60,7 @@
       <div class="composer-bottom"><span class="composer-note">Room sessions are manual and bounded; no automatic AI calls are made.</span><button class="primary" type="submit">Open room</button></div><div id="roomMessage" class="message" role="status"></div></form></div>
     <div id="roomsList" class="runs" style="margin-top:12px"></div>
   </section>
-  <section class="section" id="skills"><div class="section-head"><div><h2>Skills library</h2><p>Save reusable instructions and assign them to agents as needed.</p></div></div>
+  <section class="section" id="skills"><div class="section-head"><div><h2>Skills library</h2><p>Save reusable instructions. Assigning skills to profiles and automatically running them are not supported yet.</p></div></div>
     <div class="panel composer"><form id="skillForm"><div class="workspace-row"><label class="workspace-label" for="skillName">Name</label><input id="skillName" required maxlength="100" placeholder="Source verification" style="flex:1;min-width:0;padding:10px;border:1px solid var(--line);border-radius:9px"></div><div class="workspace-row"><label class="workspace-label" for="skillDesc">Description</label><input id="skillDesc" required maxlength="300" placeholder="Checks claims against reliable sources" style="flex:1;min-width:0;padding:10px;border:1px solid var(--line);border-radius:9px"></div><div class="workspace-row"><label class="workspace-label" for="skillInstructions">Instructions</label><textarea id="skillInstructions" required maxlength="5000" placeholder="Reusable steps and constraints" style="flex:1;min-width:0;min-height:80px"></textarea></div><div class="composer-bottom"><span class="composer-note">Skills are stored locally and are not automatically executed.</span><button class="primary" type="submit">Save skill</button></div><div id="skillMessage" class="message" role="status"></div></form></div><div id="skillsList" class="runs" style="margin-top:12px"></div>
   </section>
   <section class="section" id="knowledge"><div class="section-head"><div><h2>Shared project knowledge</h2><p>Publish findings, notes, decisions and references for your project team.</p></div></div>
@@ -183,9 +183,11 @@ function renderSimpleList(id, items, emptyText, fields) {
     list.append(card);
   }
 }
+let availableAgents = [];
 async function loadCollaboration() {
   try {
     const [agents,rooms,skills,artifacts]=await Promise.all([api('/api/agents'),api('/api/rooms'),api('/api/skills'),api('/api/artifacts')]);
+    availableAgents = agents;
     const dynamic=$('dynamicAgents'); dynamic.replaceChildren();
     for(const agent of agents){
       const card=make('article','agent');const top=make('div','agent-top');top.append(make('div','avatar','♙'),make('span','agent-state',agent.enabled?'Enabled':'Disabled'));card.append(top,make('h3','',agent.name),make('div','agent-role',agent.role),make('p','',agent.specialty),make('p','', 'Provider: '+agent.provider),make('p','', 'Skills: '+((agent.skills||[]).join(', ')||'none')));
@@ -200,7 +202,7 @@ async function refreshTranscript(roomId, container) {
   try { const messages=await api('/api/rooms/'+encodeURIComponent(roomId)+'/messages');container.replaceChildren();for(const msg of messages.slice(-40)){const row=make('div','task');row.append(make('div','task-icon','•'),make('div','',msg.from+': '+msg.body),make('span','badge','message'));container.append(row)} } catch {}
 }
 $('agentForm').addEventListener('submit',async e=>{e.preventDefault();try{await api('/api/agents',{method:'POST',body:JSON.stringify({name:$('agentName').value,role:$('agentRole').value,specialty:$('agentSpecialty').value,provider:$('agentProvider').value,systemPrompt:$('agentPrompt').value})});e.target.reset();$('agentProvider').value='claude';showNotice('agentMessage','Agent profile created. Check that the provider ID exists in office config.');await loadCollaboration()}catch(err){showNotice('agentMessage',err.message,'error')}});
-$('roomForm').addEventListener('submit',async e=>{e.preventDefault();try{await api('/api/rooms',{method:'POST',body:JSON.stringify({name:$('roomName').value,kind:$('roomKind').value,topic:$('roomTopic').value,turnLimit:Number($('roomLimit').value),participants:['michael','dwight','pam','jim']})});$('roomTopic').value='';showNotice('roomMessage','Room opened. Messages are saved locally; agents are not auto-invoked in this version.');await loadCollaboration()}catch(err){showNotice('roomMessage',err.message,'error')}});
+$('roomForm').addEventListener('submit',async e=>{e.preventDefault();try{await api('/api/rooms',{method:'POST',body:JSON.stringify({name:$('roomName').value,kind:$('roomKind').value,topic:$('roomTopic').value,turnLimit:Number($('roomLimit').value),participants:availableAgents.filter(agent=>agent.enabled).map(agent=>agent.id)})});$('roomTopic').value='';showNotice('roomMessage','Room opened. Messages are saved locally; agents are not auto-invoked in this version.');await loadCollaboration()}catch(err){showNotice('roomMessage',err.message,'error')}});
 $('skillForm').addEventListener('submit',async e=>{e.preventDefault();try{await api('/api/skills',{method:'POST',body:JSON.stringify({name:$('skillName').value,description:$('skillDesc').value,instructions:$('skillInstructions').value})});e.target.reset();showNotice('skillMessage','Skill saved locally.');await loadCollaboration()}catch(err){showNotice('skillMessage',err.message,'error')}});
 $('artifactForm').addEventListener('submit',async e=>{e.preventDefault();try{await api('/api/artifacts',{method:'POST',body:JSON.stringify({title:$('artifactTitle').value,kind:$('artifactKind').value,summary:$('artifactSummary').value,content:$('artifactContent').value,createdBy:'user'})});e.target.reset();showNotice('artifactMessage','Knowledge saved to the shared project library.');await loadCollaboration()}catch(err){showNotice('artifactMessage',err.message,'error')}});
 
