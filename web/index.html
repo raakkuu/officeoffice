@@ -1,1 +1,144 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Office Office</title><style>body{font-family:system-ui;margin:0;background:#111;color:#eee}header{padding:24px;border-bottom:1px solid #333}main{padding:24px;max-width:1100px;margin:auto}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{border:1px solid #333;border-radius:14px;padding:18px;background:#181818}pre{white-space:pre-wrap;max-height:300px;overflow:auto}</style></head><body><header><strong>🏢 OFFICE OFFICE</strong><span style="float:right">Local-first agent orchestration</span></header><main><div id="status" class="card">Loading…</div><h2>Agents</h2><div class="grid"><div class="card">👔 Michael<br><small>Supervisor</small></div><div class="card">🛠 Dwight<br><small>Backend</small></div><div class="card">🎨 Pam<br><small>Frontend</small></div><div class="card">🧪 Jim<br><small>Testing</small></div></div><h2>Runs</h2><div id="runs"></div></main><script>async function load(){let s=await fetch('/api/status').then(r=>r.json());document.querySelector('#status').innerHTML='<b>Workspace</b><br>'+s.workspace+'<br><br><b>Git</b><pre>'+s.git+'</pre>';let runs=await fetch('/api/runs').then(r=>r.json());document.querySelector('#runs').innerHTML=runs.sort((a,b)=>b.id.localeCompare(a.id)).map(x=>'<div class="card"><b>'+x.status+'</b> — '+x.prompt+'<pre>'+JSON.stringify(x.tasks,null,2)+'</pre></div>').join('')||'<div class="card">No runs yet.</div>'}load();setInterval(load,3000)</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f0e7">
+<title>Office Office — Agent Command Center</title>
+<style>
+:root{color-scheme:light;--paper:#f5f0e7;--panel:#fffdf8;--ink:#24221f;--muted:#817b72;--line:#e6ded2;--red:#8d2938;--red2:#6e1d2a;--gold:#c39a52;--green:#317657;--shadow:0 10px 30px #3323150b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,textarea{font:inherit}button{cursor:pointer}.shell{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100vh}.sidebar{background:#211e1c;color:#f9f3e9;padding:28px 18px;display:flex;flex-direction:column;gap:34px}.brand{display:flex;align-items:center;gap:11px;padding:0 8px}.brand-mark{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--red);color:#fff;font-size:20px;box-shadow:inset 0 0 0 1px #ffffff20}.brand strong{display:block;letter-spacing:.08em;font-size:13px}.brand small{color:#b6aca1;font-size:11px}.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:#91877c;padding:0 12px;margin-bottom:8px}.nav{display:grid;gap:5px}.nav a{display:flex;gap:12px;align-items:center;text-decoration:none;color:#c8beb2;padding:11px 12px;border-radius:10px;font-size:13px}.nav a.active,.nav a:hover{background:#ffffff10;color:#fff}.nav a.active{box-shadow:inset 3px 0 var(--gold)}.nav-icon{width:18px;text-align:center}.sidebar-foot{margin-top:auto;border:1px solid #ffffff18;border-radius:13px;padding:14px;color:#bdb3a8;font-size:12px}.live-dot{display:inline-block;width:7px;height:7px;background:#76c49b;border-radius:50%;margin-right:7px;box-shadow:0 0 0 4px #76c49b19}.main{min-width:0;padding:30px clamp(18px,4vw,52px) 60px;max-width:1600px;width:100%;margin:0 auto}.topline{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:30px}.eyebrow{color:var(--red);text-transform:uppercase;letter-spacing:.15em;font-size:10px;font-weight:800}.topline h1{font-size:clamp(25px,3vw,35px);line-height:1.15;letter-spacing:-.04em;margin:6px 0 0}.top-right{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}.status-pill{border:1px solid #d8e7dc;background:#edf7f0;color:var(--green);padding:8px 11px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap}.intro{color:var(--muted);margin:9px 0 0;max-width:640px}.section{margin-top:30px;scroll-margin-top:20px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px}.section-head h2{font-size:18px;letter-spacing:-.025em;margin:0}.section-head p{font-size:12px;color:var(--muted);margin:4px 0 0}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.stat,.panel,.agent,.run-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}.stat{padding:18px 20px}.stat-label{font-size:12px;color:var(--muted)}.stat-value{font-size:30px;font-weight:750;letter-spacing:-.05em;margin-top:7px}.stat-foot{font-size:11px;color:var(--muted);margin-top:2px}.composer{padding:20px}.composer-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.composer-top strong{font-size:14px}.hint{font-size:11px;color:var(--muted)}textarea{display:block;width:100%;resize:vertical;min-height:105px;padding:14px 15px;border:1px solid var(--line);border-radius:12px;background:#fffefa;color:var(--ink);outline:none}textarea:focus{border-color:#b66b76;box-shadow:0 0 0 3px #8d293814}.composer-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:13px}.composer-note{font-size:11px;color:var(--muted)}.primary{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:10px;padding:11px 17px;background:var(--red);color:#fff;font-weight:700;font-size:12px;box-shadow:0 5px 12px #8d29381f;transition:transform .15s,background .15s}.primary:hover{background:var(--red2);transform:translateY(-1px)}.primary:disabled{opacity:.55;cursor:not-allowed;transform:none}.message{margin-top:12px;padding:10px 12px;border-radius:10px;font-size:12px;display:none}.message.show{display:block}.message.error{background:#fff0ed;color:#9b3327;border:1px solid #f2c9c2}.message.ok{background:#edf7f0;color:#286847;border:1px solid #d4e8db}.agent-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.agent{padding:17px;min-width:0}.agent-top{display:flex;justify-content:space-between;align-items:start;gap:8px}.avatar{display:grid;place-items:center;width:43px;height:43px;background:#f1e5d5;border-radius:13px;font-size:23px}.agent-state{font-size:10px;color:var(--muted);border:1px solid var(--line);padding:4px 7px;border-radius:99px}.agent h3{margin:13px 0 2px;font-size:15px}.agent-role{font-size:11px;color:var(--red);font-weight:700}.agent p{font-size:11px;color:var(--muted);margin:9px 0 0;line-height:1.6}.runs{display:grid;gap:12px}.empty{padding:28px;text-align:center;color:var(--muted);font-size:13px}.empty-mark{font-size:26px;margin-bottom:8px}.run-card{padding:18px 20px}.run-head{display:flex;align-items:start;justify-content:space-between;gap:15px}.run-title{font-size:14px;font-weight:750;overflow-wrap:anywhere}.run-id{font-size:10px;color:var(--muted);margin-top:5px}.badge{display:inline-flex;align-items:center;white-space:nowrap;padding:5px 9px;border-radius:99px;font-size:10px;font-weight:800;text-transform:capitalize;background:#f0ebe3;color:#71695f}.badge.done{background:#e6f3e9;color:#286847}.badge.failed,.badge.blocked{background:#ffebe8;color:#a23c32}.badge.running,.badge.planning,.badge.reviewing{background:#fbf0d9;color:#8c641e}.run-prompt{font-size:12px;color:#655f57;margin:13px 0;white-space:pre-wrap;overflow-wrap:anywhere}.progress-track{height:5px;background:#eee7dd;border-radius:99px;overflow:hidden}.progress-fill{height:100%;background:var(--red);border-radius:99px;transition:width .25s}.run-meta{display:flex;justify-content:space-between;gap:10px;margin-top:8px;color:var(--muted);font-size:10px}.task-list{display:grid;gap:7px;margin-top:15px}.task{border:1px solid #eee6dc;border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:9px}.task-icon{font-size:14px}.task-title{font-size:12px;font-weight:650;overflow-wrap:anywhere}.task-agent{font-size:10px;color:var(--muted);margin-top:2px}.task .badge{font-size:9px}.details{margin-top:13px}.details summary{font-size:11px;color:var(--red);font-weight:700;cursor:pointer}.details pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f6f1e9;border-radius:9px;padding:12px;font-size:11px;color:#5f584f;max-height:240px;overflow:auto}.workspace{padding:17px 19px}.workspace-row{display:flex;gap:10px;align-items:start;margin:9px 0}.workspace-label{width:66px;flex-shrink:0;color:var(--muted);font-size:11px}.workspace-value{font-size:11px;overflow-wrap:anywhere}.workspace pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;font-size:11px;color:#6b635a;max-height:150px;overflow:auto}.footer{text-align:center;color:#9a9186;font-size:10px;margin-top:34px}.mobile-nav{display:none}
+@media(max-width:1000px){.shell{grid-template-columns:190px minmax(0,1fr)}.agent-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.main{padding:25px 22px 50px}}
+@media(max-width:680px){.shell{display:block}.sidebar{display:none}.main{padding:22px 15px 92px}.topline{align-items:start;margin-bottom:24px}.top-right{font-size:0}.top-right .status-pill{font-size:10px}.intro{font-size:13px}.stats{gap:8px}.stat{padding:13px 12px;border-radius:13px}.stat-label{font-size:10px}.stat-value{font-size:25px}.stat-foot{font-size:9px}.composer{padding:14px}.composer-bottom{align-items:stretch;flex-direction:column}.composer-bottom .primary{width:100%}.hint{display:none}.agent-grid{gap:8px}.agent{padding:13px}.agent p{font-size:10px}.section{margin-top:25px}.run-card{padding:14px}.run-head{align-items:start}.task{grid-template-columns:20px minmax(0,1fr);}.task>.badge{grid-column:2;justify-self:start}.mobile-nav{display:flex;position:fixed;z-index:5;bottom:0;left:0;right:0;background:#211e1cf5;backdrop-filter:blur(14px);justify-content:space-around;padding:9px 5px calc(9px + env(safe-area-inset-bottom));border-top:1px solid #ffffff16}.mobile-nav a{display:grid;gap:3px;justify-items:center;text-decoration:none;color:#c8beb2;font-size:9px;min-width:55px}.mobile-nav a span:first-child{font-size:17px}.mobile-nav a.active{color:#f2d5a0}.section-head{align-items:start}.section-head p{max-width:180px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">✳</div><div><strong>OFFICE OFFICE</strong><small>Agent command center</small></div></div>
+  <div><div class="nav-label">Workspace</div><nav class="nav"><a class="active" href="#overview"><span class="nav-icon">◫</span>Overview</a><a href="#new-run"><span class="nav-icon">✳</span>New task</a><a href="#agents"><span class="nav-icon">♙</span>Agents</a><a href="#runs"><span class="nav-icon">↗</span>Run history</a></nav></div>
+  <div class="sidebar-foot"><span class="live-dot"></span>Local workspace<br><span style="display:block;margin-top:8px">Your agents. Your code. Your machine.</span></div>
+</aside>
+<main class="main">
+  <header class="topline" id="overview"><div><div class="eyebrow">Your engineering desk</div><h1>Good work starts here.</h1><p class="intro">Give your team a task. Michael plans the work, specialists execute it, and the dashboard tracks each run.</p></div><div class="top-right"><span class="status-pill" id="connection"><span class="live-dot"></span>Connecting…</span></div></header>
+  <section class="stats" aria-label="Run statistics">
+    <div class="stat"><div class="stat-label">Total runs</div><div class="stat-value" id="totalRuns">—</div><div class="stat-foot">Recorded in this workspace</div></div>
+    <div class="stat"><div class="stat-label">Completed</div><div class="stat-value" id="completedRuns">—</div><div class="stat-foot">Successfully reviewed</div></div>
+    <div class="stat"><div class="stat-label">In progress</div><div class="stat-value" id="activeTasks">—</div><div class="stat-foot">Active or planning runs</div></div>
+  </section>
+  <section class="section" id="new-run"><div class="section-head"><div><h2>Start something</h2><p>Describe the outcome you want, not just the steps.</p></div><span class="eyebrow">01 / Compose</span></div>
+    <div class="panel composer"><div class="composer-top"><strong>What should the team build?</strong><span class="hint">Up to 2,000 characters</span></div>
+    <form id="runForm"><label for="taskPrompt" class="hint" style="display:block;margin-bottom:7px">Task description</label><textarea id="taskPrompt" maxlength="2000" placeholder="Example: Inspect the login flow, fix the validation bug, and add tests…" required></textarea><div class="composer-bottom"><span class="composer-note">Runs use the providers configured on this machine.</span><button class="primary" id="startButton" type="submit"><span>✦</span> Start a run</button></div><div id="formMessage" class="message" role="status" aria-live="polite"></div></form></div>
+  </section>
+  <section class="section" id="agents"><div class="section-head"><div><h2>Your people</h2><p>A focused team with distinct responsibilities.</p></div><span class="eyebrow">02 / Team</span></div>
+    <div class="agent-grid">
+      <article class="agent" id="agentMichael"><div class="agent-top"><div class="avatar">👔</div><span class="agent-state">Lead</span></div><h3>Michael</h3><div class="agent-role">Supervisor</div><p>Plans the work, coordinates specialists, and reviews the result.</p></article>
+      <article class="agent" id="agentDwight"><div class="agent-top"><div class="avatar">🛠️</div><span class="agent-state">Specialist</span></div><h3>Dwight</h3><div class="agent-role">Backend & systems</div><p>Handles implementation, architecture, and core logic.</p></article>
+      <article class="agent" id="agentPam"><div class="agent-top"><div class="avatar">🎨</div><span class="agent-state">Specialist</span></div><h3>Pam</h3><div class="agent-role">Frontend & UX</div><p>Works on interfaces, usability, and thoughtful details.</p></article>
+      <article class="agent" id="agentJim"><div class="agent-top"><div class="avatar">🧪</div><span class="agent-state">Specialist</span></div><h3>Jim</h3><div class="agent-role">Testing & quality</div><p>Focuses on reliability, edge cases, and verification.</p></article>
+    </div>
+  </section>
+  <section class="section" id="runs"><div class="section-head"><div><h2>Run history</h2><p>Live updates from the local orchestrator.</p></div><span class="eyebrow">03 / Activity</span></div><div id="runsList" class="runs"><div class="panel empty"><div class="empty-mark">◌</div>Loading your runs…</div></div></section>
+  <section class="section" id="workspace"><div class="section-head"><div><h2>Workspace health</h2><p>Connection and Git information for this folder.</p></div></div><div class="panel workspace"><div class="workspace-row"><div class="workspace-label">Folder</div><div class="workspace-value" id="workspacePath">Connecting…</div></div><div class="workspace-row"><div class="workspace-label">Git status</div><div class="workspace-value" style="min-width:0;flex:1"><pre id="gitStatus">Loading…</pre></div></div><div class="workspace-row" id="errorRow" hidden><div class="workspace-label">Last error</div><div class="workspace-value" id="lastError" style="color:#a23c32"></div></div></div></section>
+  <footer class="footer">OFFICE OFFICE · Built for focused work · Local-first by design</footer>
+</main>
+</div>
+<nav class="mobile-nav" aria-label="Mobile navigation"><a class="active" href="#overview"><span>◫</span><span>Home</span></a><a href="#new-run"><span>✳</span><span>New task</span></a><a href="#agents"><span>♙</span><span>Agents</span></a><a href="#runs"><span>↗</span><span>Runs</span></a></nav>
+<script>
+const $ = id => document.getElementById(id);
+let isSubmitting = false;
+let lastRuns = [];
+function make(tag, className, text) { const el = document.createElement(tag); if (className) el.className = className; if (text !== undefined) el.textContent = text; return el; }
+function setMessage(text, kind) { const el = $('formMessage'); el.textContent = text; el.className = 'message show ' + kind; }
+function statusLabel(value) { return String(value || 'unknown').replaceAll('_', ' '); }
+function renderRuns(runs) {
+  lastRuns = Array.isArray(runs) ? runs : [];
+  $('totalRuns').textContent = String(lastRuns.length);
+  $('completedRuns').textContent = String(lastRuns.filter(r => r.status === 'done').length);
+  $('activeTasks').textContent = String(lastRuns.filter(r => ['planning','running','reviewing'].includes(r.status)).length);
+  const list = $('runsList'); list.replaceChildren();
+  if (!lastRuns.length) {
+    const empty = make('div','panel empty'); empty.append(make('div','empty-mark','✳'),make('div','','No runs yet.'),make('div','','Your first task will appear here.')); list.append(empty); return;
+  }
+  for (const run of lastRuns) {
+    const card = make('article','run-card');
+    const head = make('div','run-head'); const titleWrap = make('div',''); titleWrap.append(make('div','run-title',run.summary || run.prompt || 'Untitled run'),make('div','run-id','Run ' + String(run.id || '—')));
+    const badge = make('span','badge ' + String(run.status || ''),statusLabel(run.status)); head.append(titleWrap,badge); card.append(head);
+    if (run.prompt && run.summary && run.prompt !== run.summary) card.append(make('p','run-prompt',run.prompt));
+    const tasks = Array.isArray(run.tasks) ? run.tasks : [];
+    const done = tasks.filter(t => t.status === 'done').length;
+    const percent = tasks.length ? Math.round(done / tasks.length * 100) : (run.status === 'done' ? 100 : 0);
+    const track = make('div','progress-track'); const fill = make('div','progress-fill'); fill.style.width = percent + '%'; track.append(fill); card.append(track);
+    const meta = make('div','run-meta'); meta.append(make('span', '', done + ' of ' + tasks.length + ' tasks complete'),make('span','',percent + '%')); card.append(meta);
+    if (tasks.length) {
+      const taskList = make('div','task-list');
+      for (const task of tasks) {
+        const row = make('div','task'); const icon = make('div','task-icon',task.status === 'done' ? '✓' : task.status === 'failed' ? '!' : task.status === 'running' ? '↻' : '○');
+        const info = make('div',''); info.append(make('div','task-title',task.title || task.id || 'Task'),make('div','task-agent',(task.agent || 'unassigned') + (task.attempts ? ' · attempt ' + task.attempts : '')));
+        row.append(icon,info,make('span','badge ' + String(task.status || ''),statusLabel(task.status))); taskList.append(row);
+      }
+      card.append(taskList);
+    } else if (['planning','running'].includes(run.status)) card.append(make('p','run-prompt','Planning tasks…'));
+    if (run.summary || run.error) {
+      const details = make('details','details'); details.append(make('summary','','Run notes'));
+      if (run.error) details.append(make('pre','',run.error));
+      else if (run.summary) details.append(make('pre','',run.summary));
+      card.append(details);
+    }
+    list.append(card);
+  }
+}
+async function loadDashboard() {
+  try {
+    const [statusResponse, runsResponse] = await Promise.all([fetch('/api/status'),fetch('/api/runs')]);
+    if (!statusResponse.ok || !runsResponse.ok) throw new Error('Dashboard API returned an error.');
+    const status = await statusResponse.json(); const runs = await runsResponse.json();
+    $('connection').innerHTML = '<span class="live-dot"></span>' + (status.runActive ? 'Run in progress' : 'Connected locally');
+    $('workspacePath').textContent = status.workspace || 'Unknown';
+    $('gitStatus').textContent = status.git || 'No Git status available.';
+    $('errorRow').hidden = !status.lastError;
+    $('lastError').textContent = status.lastError || '';
+    renderRuns(runs);
+    $('startButton').disabled = Boolean(status.runActive) || isSubmitting;
+    if (status.runActive) $('startButton').innerHTML = '<span>◌</span> Working…';
+    else if (!isSubmitting) $('startButton').innerHTML = '<span>✦</span> Start a run';
+    for (const id of ['Michael','Dwight','Pam','Jim']) {
+      const el = $('agent' + id); const state = el && el.querySelector('.agent-state');
+      if (state) state.textContent = 'Specialist';
+    }
+    if (status.runActive) { const el = $('agentMichael'); const state = el && el.querySelector('.agent-state'); if (state) state.textContent = 'Working'; }
+  } catch (error) {
+    $('connection').textContent = 'Connection issue';
+    $('gitStatus').textContent = 'Could not reach the local dashboard API.';
+    $('startButton').disabled = true;
+  }
+}
+$('runForm').addEventListener('submit', async event => {
+  event.preventDefault();
+  if (isSubmitting) return;
+  const prompt = $('taskPrompt').value.trim();
+  if (!prompt) { setMessage('Write a task description first.','error'); return; }
+  isSubmitting = true; $('startButton').disabled = true; $('startButton').textContent = 'Starting…';
+  try {
+    const response = await fetch('/api/runs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'Could not start the run.');
+    setMessage(result.message || 'Run accepted. Watch progress below.','ok');
+    $('taskPrompt').value = '';
+    await loadDashboard();
+    $('runs').scrollIntoView({behavior:'smooth',block:'start'});
+  } catch (error) {
+    setMessage(error instanceof Error ? error.message : 'Could not start the run.','error');
+  } finally {
+    isSubmitting = false; await loadDashboard();
+  }
+});
+document.querySelectorAll('.mobile-nav a, .nav a').forEach(link => link.addEventListener('click', () => {
+  document.querySelectorAll('.nav a, .mobile-nav a').forEach(item => item.classList.toggle('active', item.getAttribute('href') === link.getAttribute('href')));
+}));
+loadDashboard();
+setInterval(loadDashboard,3000);
+</script>
+</body>
+</html>
