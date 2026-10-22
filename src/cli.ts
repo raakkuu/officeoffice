@@ -10,25 +10,26 @@ const cmd = args[0];
 const cwd = process.cwd();
 
 async function main() {
-  const cfg = await loadConfig(cwd);
-  if (!cmd || cmd === 'help' || cmd === '--help') {
+  // Help and agent-list commands must work without loading configuration or contacting providers.
+  if (!cmd || cmd === 'help' || cmd === '--help' || cmd === '-h') {
     console.log(renderBanner());
     console.log(`
 Usage:
   office "Build authentication"
-  office agents
+  office agents  (or: office agent)
   office doctor
   office status
   office web
   office config
-  office config set supervisor claude
+  office config set supervisor <provider-id>
 
-Provider API keys are read from environment variables (recommended):
-  ANTHROPIC_API_KEY  OPENAI_API_KEY  GEMINI_API_KEY
+Help and the agent list do not require provider authentication.
+Provider API keys are only needed when the selected provider requires them.
 `);
     return;
   }
-  if (cmd === 'agents') {
+
+  if (cmd === 'agents' || cmd === 'agent') {
     console.log(renderBanner());
     console.log('\nAgents:');
     console.log('  michael  Supervisor / planner');
@@ -37,8 +38,12 @@ Provider API keys are read from environment variables (recommended):
     console.log('  jim      Testing / review');
     return;
   }
+
+  const cfg = await loadConfig(cwd);
+
   if (cmd === 'doctor') {
-    console.log('Office Office doctor\n');
+    console.log(renderBanner());
+    console.log('\nOffice Office doctor\n');
     console.log(`Node: ${process.version}`);
     console.log(`Git repo: ${(await isGitRepo(cwd)) ? 'yes' : 'no'}`);
     for (const p of cfg.providers) {
@@ -48,10 +53,13 @@ Provider API keys are read from environment variables (recommended):
     console.log('\nAPI keys are never written to the project or Hive.');
     return;
   }
+
   if (cmd === 'status') {
-    console.log((await status(cwd)).stdout || 'Working tree clean.');
+    console.log(renderBanner());
+    console.log('\n' + ((await status(cwd)).stdout || 'Working tree clean.'));
     return;
   }
+
   if (cmd === 'web') {
     console.log(renderBanner());
     const server = await startServer(cwd, cfg.webPort);
@@ -62,6 +70,7 @@ Provider API keys are read from environment variables (recommended):
     }));
     return;
   }
+
   if (cmd === 'config') {
     if (args[1] === 'set' && args[2] && args[3]) {
       if (args[2] === 'supervisor') {
@@ -76,19 +85,21 @@ Provider API keys are read from environment variables (recommended):
         console.log(`Supervisor set to ${args[3]}`);
         return;
       }
-      console.error('Supported: office config set supervisor <provider>');
+      console.error('Supported: office config set supervisor <provider-id>');
       process.exitCode = 1;
       return;
     }
     console.log(JSON.stringify({ ...cfg, providers: cfg.providers.map(p => ({ ...p, env: undefined })) }, null, 2));
     return;
   }
+
   const prompt = args.join(' ');
   if (!prompt.trim()) {
-    console.error('Please provide a task, for example: office "Add a regression test".');
+    console.error('Unknown command or empty task. Run `office --help` for available commands.');
     process.exitCode = 1;
     return;
   }
+
   console.log(renderBanner());
   const orchestrator = new Orchestrator(cfg, cwd, output => {
     process.stdout.write(output.endsWith('\n') ? output : output + '\n');
