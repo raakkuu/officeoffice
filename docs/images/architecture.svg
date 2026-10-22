@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="660" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
+<title id="title">Office Office architecture</title><desc id="desc">A local dashboard and CLI send a task to Michael, who plans work for specialist agents Dwight, Pam, and Jim. Results are persisted in the local Hive folder and reviewed.</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#211e1c"/><stop offset="1" stop-color="#342a28"/></linearGradient><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#120d0c" flood-opacity=".22"/></filter></defs>
+<rect width="1200" height="660" rx="26" fill="#f5f0e7"/><rect x="20" y="20" width="1160" height="620" rx="20" fill="url(#bg)"/>
+<text x="64" y="76" fill="#e4bd7d" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="4">OFFICE OFFICE / SYSTEM MAP</text>
+<text x="64" y="115" fill="#fffaf2" font-family="Inter,Arial,sans-serif" font-size="30" font-weight="700">One request. A coordinated team.</text>
+<g font-family="Inter,Arial,sans-serif" text-anchor="middle" filter="url(#shadow)">
+<rect x="75" y="165" width="270" height="92" rx="16" fill="#fffaf2"/><text x="210" y="200" fill="#8d2938" font-size="13" font-weight="700" letter-spacing="1.5">ENTRY POINTS</text><text x="210" y="229" fill="#28221f" font-size="21" font-weight="700">CLI + Web dashboard</text>
+<rect x="425" y="165" width="350" height="92" rx="16" fill="#8d2938"/><text x="600" y="200" fill="#f5d9a5" font-size="13" font-weight="700" letter-spacing="1.5">PLAN + COORDINATE</text><text x="600" y="230" fill="#fffaf2" font-size="24" font-weight="700">Michael · Supervisor</text>
+<rect x="855" y="165" width="270" height="92" rx="16" fill="#fffaf2"/><text x="990" y="200" fill="#8d2938" font-size="13" font-weight="700" letter-spacing="1.5">LOCAL WORKSPACE</text><text x="990" y="229" fill="#28221f" font-size="21" font-weight="700">Your repository</text>
+</g>
+<g stroke="#c39a52" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M345 211 H414"/><path d="M402 202 L414 211 L402 220"/><path d="M775 211 H844"/><path d="M832 202 L844 211 L832 220"/><path d="M600 257 V300 H250 V330"/><path d="M600 300 H600 V330"/><path d="M600 300 H950 V330"/></g>
+<g font-family="Inter,Arial,sans-serif" text-anchor="middle" filter="url(#shadow)">
+<rect x="105" y="330" width="290" height="105" rx="16" fill="#fffaf2"/><text x="250" y="367" fill="#8d2938" font-size="13" font-weight="700">DWIGHT</text><text x="250" y="395" fill="#28221f" font-size="21" font-weight="700">Backend + systems</text><text x="250" y="416" fill="#81776c" font-size="13">Implementation tasks</text>
+<rect x="455" y="330" width="290" height="105" rx="16" fill="#fffaf2"/><text x="600" y="367" fill="#8d2938" font-size="13" font-weight="700">PAM</text><text x="600" y="395" fill="#28221f" font-size="21" font-weight="700">Frontend + UX</text><text x="600" y="416" fill="#81776c" font-size="13">Interface tasks</text>
+<rect x="805" y="330" width="290" height="105" rx="16" fill="#fffaf2"/><text x="950" y="367" fill="#8d2938" font-size="13" font-weight="700">JIM</text><text x="950" y="395" fill="#28221f" font-size="21" font-weight="700">Testing + quality</text><text x="950" y="416" fill="#81776c" font-size="13">Verification tasks</text>
+<rect x="290" y="510" width="620" height="82" rx="16" fill="#342a28" stroke="#c39a52" stroke-width="1.5"/><text x="600" y="543" fill="#e4bd7d" font-size="13" font-weight="700" letter-spacing="2">PERSIST + REVIEW</text><text x="600" y="571" fill="#fffaf2" font-size="22" font-weight="700">.hive/ · run history · supervisor review</text>
+</g>
+<g stroke="#c39a52" stroke-width="2.5" fill="none" stroke-linecap="round"><path d="M250 435 V472 H600 V500"/><path d="M600 435 V500"/><path d="M950 435 V472 H600"/><path d="M600 500 l-8 -11 M600 500 l8 -11"/></g>
+<text x="64" y="614" fill="#bdb0a2" font-family="Inter,Arial,sans-serif" font-size="12">LOCAL-FIRST · PROVIDERS YOU CHOOSE · NO REQUIRED CLOUD CONTROL PLANE</text>
+</svg>
