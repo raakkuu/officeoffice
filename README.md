@@ -85,6 +85,18 @@ The CLI uses a pixel-inspired block-letter logo with a coral accent and a minima
 - At least one supported provider CLI installed and authenticated, or a custom CLI provider configured
 - Provider usage may incur charges depending on your account and provider
 
+## Which terminal should I use?
+
+**You do not need a different terminal for each command.** Open one terminal, run the commands for your operating system in order, and keep using that same terminal. The commands inside each code block are meant to be run one line at a time, from top to bottom. You only need another terminal window if you want to run a separate task at the same time.
+
+- **Windows:** use PowerShell or Command Prompt (CMD). The Windows install section below works with either unless it specifically says otherwise.
+- **macOS / Linux:** use the Terminal app and a Bash/Zsh-compatible shell.
+- **Android:** use the Termux app; ordinary Android apps such as the browser are not terminals.
+- **Inside the Office Office repository folder:** run project commands such as `npm install`, `npm run check`, `npm test`, and `npm run build`.
+- **What the commands mean:** `git clone` downloads the repository, `cd officeoffice` enters its folder, `npm install` installs project dependencies, `npm run check` checks the code, `npm test` runs tests, and `npm run build` builds the project. Use `npm install`—not `npm get`.
+
+Installing Office Office is separate from installing an AI provider. After Office Office is built, install and sign in to whichever provider CLI you want to use by following that provider's official instructions. You do not need to install every provider. The provider CLI must be available in the same environment where you run Office Office.
+
 ## Install from source (Windows, macOS, Linux, and Termux)
 
 Office Office needs **Node.js 20+** and Git. Commands below are for a fresh install. Use the section after this one to update an existing checkout without losing your work.
