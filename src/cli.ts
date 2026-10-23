@@ -2,7 +2,7 @@ import { loadConfig, saveConfig } from './config.js';
 import { providerDoctor } from './providers.js';
 import { Orchestrator } from './supervisor.js';
 import { startServer } from './server.js';
-import { status, isGitRepo } from './git.js';
+import { status, isGitRepo, git } from './git.js';
 import { renderBanner } from './banner.js';
 import { loadSkills } from './skills.js';
 import { createKnowledgeProvider } from './knowledge.js';
@@ -52,6 +52,7 @@ async function main() {
   office integrations disable <github|playwright|context7>
   office integrations mcp
   office status
+  office diff
   office web [--lan]
   office config
   office config --json
@@ -119,6 +120,7 @@ async function main() {
     console.log('\nThis checks executable/key presence; it does not prove authentication or a successful remote request.');console.log('API keys are never written to the project or Hive.');return;
   }
   if (cmd==='status') { console.log((await status(cwd)).stdout||'Working tree clean.'); return; }
+  if (cmd==='diff') { const result=await git(cwd,['diff','HEAD']);if(result.code!==0){console.error(result.stderr||'Could not read Git diff.');process.exitCode=1;return;}console.log(result.stdout||'No tracked changes compared with HEAD. Run `office status` to check for untracked files.');return; }
   if (cmd==='web') { const lan=args.includes('--lan');const host=lan?'0.0.0.0':'127.0.0.1';const server=await startServer(cwd,cfg.webPort,host);console.log(`Office Office UI: http://${lan?'<laptop-ip>':'127.0.0.1'}:${cfg.webPort}`);console.log(lan?'LAN dashboard enabled. Only use this on a trusted private network; stop it with Ctrl+C when finished.':'Local dashboard only. Press Ctrl+C to stop.');console.log('');await new Promise<void>(resolve=>process.on('SIGINT',()=>{server.close().then(()=>resolve());}));return; }
   if (cmd==='config') {
     if(args[1]==='set'&&args[2]&&args[3]){if(args[2]==='supervisor'){const provider=cfg.providers.find(p=>p.id===args[3]);if(!provider){console.error(`Unknown provider "${args[3]}". Run office config to inspect provider IDs.`);process.exitCode=1;return;}cfg.supervisor=args[3];await saveConfig(cfg);console.log(`Supervisor set to ${args[3]}`);return;}console.error('Supported: office config set supervisor <provider-id>');process.exitCode=1;return;}
