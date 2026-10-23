@@ -5,6 +5,7 @@ import { startServer } from './server.js';
 import { status, isGitRepo } from './git.js';
 import { renderBanner } from './banner.js';
 import { formatSkillInstructions, loadSkills } from './skills.js';
+import { createKnowledgeProvider } from './knowledge.js';
 
 const args = process.argv.slice(2);
 const cmd = args[0];
@@ -29,6 +30,7 @@ function printConfig(cfg: Awaited<ReturnType<typeof loadConfig>>) {
   console.log(`Max parallel:     ${cfg.maxParallel}`);
   console.log(`Auto commit:      ${cfg.autoCommit ? 'enabled' : 'disabled'}`);
   console.log(`Dashboard port:   ${cfg.webPort}`);
+  console.log(`Knowledge:        ${cfg.knowledge.enabled ? cfg.knowledge.provider : 'disabled'}`);
   console.log('\nWorker assignments:');
   for (const [agent, provider] of Object.entries(cfg.workers)) console.log(`  ${agent.padEnd(12)} ${provider}`);
   console.log('\nProviders:');
@@ -48,6 +50,9 @@ async function main() {
   office agents
   office skills
   office doctor
+  office knowledge status
+  office knowledge enable xerj
+  office knowledge disable
   office status
   office web [--lan]
   office config
@@ -81,6 +86,34 @@ Provider API keys are only needed when the selected provider requires them.
 
   const cfg = await loadConfig(cwd);
 
+  if (cmd === 'knowledge') {
+    const action = args[1] || 'status';
+    const provider = createKnowledgeProvider(cfg.knowledge, cwd);
+    if (action === 'status') {
+      console.log(`Knowledge provider: ${cfg.knowledge.enabled ? cfg.knowledge.provider : 'disabled'}`);
+      console.log(`Command: ${cfg.knowledge.command}`);
+      console.log(`Prefix: ${cfg.knowledge.prefix}`);
+      console.log(`Available: ${await provider.available() ? 'yes' : 'no'}`);
+      return;
+    }
+    if (action === 'enable' && args[2] === 'xerj') {
+      cfg.knowledge.provider='xerj';
+      cfg.knowledge.enabled=true;
+      await saveConfig(cfg);
+      console.log('XERJ knowledge provider enabled. Install the `xerj` CLI before running a mission.');
+      return;
+    }
+    if (action === 'disable') {
+      cfg.knowledge.enabled=false;
+      await saveConfig(cfg);
+      console.log('Knowledge retrieval disabled.');
+      return;
+    }
+    console.error('Supported: office knowledge status | office knowledge enable xerj | office knowledge disable');
+    process.exitCode=1;
+    return;
+  }
+
   if (cmd === 'doctor') {
     console.log('Office Office doctor\n');
     console.log(`Node: ${process.version}`);
@@ -90,6 +123,8 @@ Provider API keys are only needed when the selected provider requires them.
       const auth = p.kind === 'ollama' ? 'local provider' : d.apiKey ? 'API key detected' : 'API key not detected';
       console.log(`${p.id.padEnd(8)} ${d.installed ? '✓ installed' : '✗ missing'}  ${auth}`);
     }
+    const knowledge = createKnowledgeProvider(cfg.knowledge, cwd);
+    console.log(`knowledge ${cfg.knowledge.enabled ? '✓ enabled' : '○ disabled'}  ${await knowledge.available() ? 'XERJ available' : 'XERJ not detected'}`);
     console.log('\nThis checks executable/key presence; it does not prove that a provider can authenticate or make a successful request.');
     console.log('API keys are never written to the project or Hive.');
     return;
