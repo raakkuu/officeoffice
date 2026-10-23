@@ -248,7 +248,7 @@ Workspace-specific skill overrides can live in `.hive/skills/<id>/SKILL.md`.
 | `office agents` | Show agent roster |
 | `office skills` | List active skills |
 | `office doctor` | Check Node, Git, providers, knowledge, and integrations |
-| `office status` | Show Git status |
+| `office status` | Show Git status |\n| `office diff` | Review tracked changes compared with `HEAD` |
 | `office web` | Start local dashboard |
 | `office web --lan` | Start dashboard on trusted LAN |
 | `office config` | Show configuration without secrets |
