@@ -4,7 +4,7 @@ export const configPath=path.join(home,'config.json');
 const defaultIntegrations:IntegrationConfig[]=[
 {id:'github',enabled:false,command:'gh',description:'GitHub repository, issues, pull requests and CI context.',mcp:{command:'docker',args:['run','-i','--rm','ghcr.io/github/github-mcp-server','--read-only','--toolsets','context,repos,issues,pull_requests,actions']}},
 {id:'playwright',enabled:false,command:'npx',description:'Browser verification through the official Playwright MCP server.',mcp:{command:'npx',args:['-y','@playwright/mcp@latest']}},
-{id:'context7',enabled:false,command:'ctx7',description:'Current library and API documentation through Context7.',mcp:{command:'npx',args:['-y','@upstash/context7-mcp@latest']}}
+{id:'context7',enabled:false,command:'npx',description:'Current library and API documentation through Context7.',mcp:{command:'npx',args:['-y','@upstash/context7-mcp@latest']}}
 ];
 const defaults:OfficeConfig={version:1,supervisor:'claude',workers:{michael:'claude',dwight:'codex',pam:'claude',jim:'codex'},maxParallel:2,workspace:process.cwd(),autoCommit:false,webPort:4311,knowledge:{provider:'none',enabled:false,command:'xerj',prefix:'office-office',maxChars:12000},integrations:defaultIntegrations,providers:[
 {id:'claude',kind:'claude',command:'claude',args:['-p','{prompt}'],enabled:true},
