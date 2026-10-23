@@ -4,6 +4,8 @@
 
 Office Office is the orchestration/control-room layer above coding-agent providers. Michael plans missions, specialist agents implement them, skills provide repeatable workflows, knowledge providers supply context, integrations provide external capabilities, and Michael reviews the result.
 
+![Office Office architecture](docs/images/architecture.svg)
+
 ## What you get
 
 - Michael — planning, delegation, and final review
@@ -13,6 +15,8 @@ Office Office is the orchestration/control-room layer above coding-agent provide
 - Dependency-aware parallel task execution
 - Local `.hive/` task, run, collaboration, and artifact data
 - Optional local web dashboard
+
+![Office Office dashboard preview](docs/images/dashboard-preview.svg)
 - Provider adapters for Claude Code, Codex CLI, Gemini CLI, Ollama, and custom CLIs
 - First-class reusable skills
 - Optional XERJ project knowledge
@@ -252,6 +256,12 @@ Office Office is built around a supervisor and specialist team. The dashboard pr
 Room discussions are explicit and bounded; Office Office does not run an always-on autonomous conversation.
 
 See [docs/agent-collaboration.md](docs/agent-collaboration.md).
+
+![Office Office agent collaboration](docs/images/agent-communication.svg)
+
+The command-line workflow is illustrated here:
+
+![Office Office terminal preview](docs/images/terminal-preview.svg)
 
 ## Project layout
 
