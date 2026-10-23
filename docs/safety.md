@@ -8,6 +8,8 @@ The safety text included in supervisor and worker prompts is guidance, **not a s
 
 For sensitive work, combine Office Office with operating-system permissions, provider-native approvals, a disposable Git worktree or container, and least-privilege credentials.
 
+For an additional preflight guard, set `OFFICE_BLOCK_DIRTY_WORKTREE=1` before starting a mission. Office Office will refuse to start a mission from a Git repository with uncommitted changes. This protects existing edits from being mixed into a run, but it does not sandbox provider commands or replace provider-native approvals.
+
 ## Before a mission
 
 1. Open the intended repository and run `git status --short`.
