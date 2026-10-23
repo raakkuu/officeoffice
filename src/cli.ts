@@ -40,6 +40,7 @@ async function main() {
     printBanner();
     console.log(`\nUsage:
   office "Build authentication"
+  office setup
   office agents
   office skills
   office doctor
@@ -62,6 +63,30 @@ async function main() {
   if (cmd==='skills'||cmd==='skill') { const skills=await loadSkills(cwd);console.log(`\nSkills (${skills.length}):`);if(!skills.length)console.log('  No repository skills found.');for(const skill of skills)console.log(`  ${skill.id.padEnd(20)} ${skill.description} [${skill.source}]`);return; }
 
   const cfg = await loadConfig(cwd);
+  if (cmd==='setup') {
+    console.log('Office Office setup checklist\\n------------------------------');
+    console.log(`Node.js: ${process.version} ${Number(process.versions.node.split('.')[0]) >= 20 ? '✓' : '✗ (Node.js 20+ recommended)'}`);
+    console.log(`Git: ${(await isGitRepo(cwd)) ? '✓ repository detected' : '○ current folder is not a Git repository'}`);
+    console.log(`Workspace: ${cwd}`);
+    console.log(`Supervisor: ${cfg.supervisor}`);
+    console.log(`Dashboard: http://127.0.0.1:${cfg.webPort}`);
+    console.log('\\nProvider availability:');
+    let available = 0;
+    for (const p of cfg.providers.filter(p => p.enabled !== false)) {
+      const d = await providerDoctor(p);
+      if (d.installed) available++;
+      console.log(`  ${d.installed ? '✓' : '○'} ${p.id.padEnd(10)} ${d.installed ? 'installed' : 'not detected'}`);
+    }
+    console.log(`\\nDetected providers: ${available}`);
+    console.log('\\nNext steps:');
+    console.log('  1. Install and authenticate one supported provider CLI.');
+    console.log('  2. Run office doctor to check providers and optional integrations.');
+    console.log('  3. Run office "Describe a small, safe change and add a test" from a Git repository.');
+    console.log('  4. Run office web to open the local dashboard.');
+    console.log('  5. Review the Git diff and test results before committing or merging.');
+    console.log('\\nSafety: integrations are opt-in. Prompt-based guardrails are not a security sandbox.');
+    return;
+  }
   if (cmd==='knowledge') {
     const action=args[1]||'status'; const provider=createKnowledgeProvider(cfg.knowledge,cwd);
     if(action==='status'){console.log(`Knowledge provider: ${cfg.knowledge.enabled?cfg.knowledge.provider:'disabled'}`);console.log(`Command: ${cfg.knowledge.command}`);console.log(`Prefix: ${cfg.knowledge.prefix}`);console.log(`Available: ${await provider.available()?'yes':'no'}`);return;}
