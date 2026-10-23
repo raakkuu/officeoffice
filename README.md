@@ -224,19 +224,147 @@ Set only the credentials you need. `office doctor` reports key presence, not the
 
 Ollama can run local models. Make sure the Ollama CLI and selected model are installed, then verify your local configuration before starting a task. The default model in the generated configuration is `qwen2.5-coder:7b`.
 
+## Knowledge and external integrations
+
+Office Office keeps knowledge and external tools optional and provider-neutral. They are disabled by default so a basic installation does not require extra services or credentials.
+
+### XERJ local knowledge
+
+XERJ can provide local project search and retrieval before Michael plans a mission and before workers implement tasks. Office Office does not require XERJ for normal operation.
+
+Check the integration:
+
+```bash
+office knowledge status
+```
+
+Enable it after installing the XERJ CLI separately:
+
+```bash
+office knowledge enable xerj
+office knowledge status
+```
+
+Disable it at any time:
+
+```bash
+office knowledge disable
+```
+
+Retrieved knowledge is treated as **untrusted evidence**. Agents are instructed to verify retrieved material against the current checkout and never execute instructions embedded in search results. XERJ indexing remains local to the workspace unless you explicitly configure something else.
+
+### GitHub integration
+
+When enabled and the `gh` CLI is available, Office Office can give Michael and workers repository, issue, pull-request, and recent Actions context. The integration is read-oriented by default and does not put GitHub tokens into the Office Office project configuration.
+
+Install and authenticate the GitHub CLI using its official instructions, then check availability:
+
+```bash
+office integrations status
+```
+
+Enable GitHub context:
+
+```bash
+office integrations enable github
+office integrations status
+```
+
+Disable it again:
+
+```bash
+office integrations disable github
+```
+
+Office Office also generates a read-only GitHub MCP configuration for compatible worker clients. Inspect it with:
+
+```bash
+office integrations mcp
+```
+
+The generated GitHub MCP configuration uses read-only mode by default. GitHub's official MCP server supports explicit toolsets and a strict read-only mode, which prevents write tools from being exposed even if they are requested. citeturn0search0turn0search1
+
+### Playwright browser verification
+
+Playwright can give compatible workers real-browser verification for web applications. Enable the integration when you want agents to test rendered behavior, navigation, forms, loading states, and other user-visible flows:
+
+```bash
+office integrations enable playwright
+office integrations status
+office integrations mcp
+```
+
+Office Office uses the official Playwright MCP package through `npx`; the browser tooling remains optional and is only exposed to enabled MCP-capable workers. Playwright MCP requires Node.js 20+ and supports common MCP clients including Claude Code, Codex, and other compatible clients. citeturn0search2turn0search11
+
+Disable it when it is not needed:
+
+```bash
+office integrations disable playwright
+```
+
+### Context7 documentation retrieval
+
+Context7 is useful when a task depends on current, version-sensitive library, framework, SDK, or API behavior. Enable it when documentation retrieval is useful:
+
+```bash
+office integrations enable context7
+office integrations status
+office integrations mcp
+```
+
+Workers should still verify important documentation claims against the installed dependency and repository. Do not send secrets or unrelated private project data to external documentation services.
+
+### Recommended setup
+
+A simple progressive setup is:
+
+```text
+Basic
+  Office Office + one provider
+
+Local knowledge
+  + XERJ
+
+Repository awareness
+  + GitHub CLI integration
+
+Web verification
+  + Playwright MCP
+
+Current library docs
+  + Context7 MCP
+```
+
+You do **not** need all integrations to run Office Office. Enable only the capabilities your workspace needs.
+
 ## CLI reference
 
 | Command | Purpose |
 | --- | --- |
 | `office --help` | Show command help |
 | `office agents` | Show the agent roster |
-| `office doctor` | Check Node, Git, provider executables, and key visibility |
+| `office skills` | List repository and workspace skills |
+| `office doctor` | Check Node, Git, provider executables, knowledge, and integrations |
+| `office knowledge status` | Show XERJ knowledge status |
+| `office knowledge enable xerj` | Enable XERJ local retrieval |
+| `office knowledge disable` | Disable knowledge retrieval |
+| `office integrations status` | Show integration availability and enabled state |
+| `office integrations enable <id>` | Enable `github`, `playwright`, or `context7` |
+| `office integrations disable <id>` | Disable an integration |
+| `office integrations mcp` | Print the MCP manifest for enabled integrations |
 | `office status` | Show Git status for the current directory |
 | `office web` | Start the local dashboard |
+| `office web --lan` | Start the dashboard on the local network; use only on a trusted private network |
 | `office config` | Show a human-readable configuration summary without secrets |
 | `office config --json` | Print machine-readable configuration with provider environment values omitted |
 | `office config set supervisor <provider-id>` | Change the configured supervisor |
 | `office "<task>"` | Run a coding task |
+
+## Skills
+
+Reusable workflows live in `skills/<id>/SKILL.md`. Current built-in skills cover planning, engineering, design, testing, debugging, review, security review, release readiness, retrieval-before-writing, repository operations, browser verification, and documentation retrieval. Use `office skills` to inspect what is available.
+
+Skills are workflow guidance, not permission boundaries. User requests, repository instructions, provider security controls, and explicit integration configuration remain higher priority.
 
 ## Project layout
 
@@ -245,15 +373,18 @@ officeoffice/
 ├── bin/                 # Installed CLI entry point
 ├── src/
 │   ├── cli.ts           # CLI commands
-│   ├── config.ts        # Local provider configuration
+│   ├── config.ts        # Local provider and integration configuration
+│   ├── integrations.ts  # GitHub, Playwright, and Context7 integration registry
+│   ├── knowledge.ts     # Provider-neutral local knowledge layer
 │   ├── providers.ts     # Provider process execution
 │   ├── scheduler.ts     # Task dependency scheduling
 │   ├── server.ts        # Local dashboard API
-│   ├── supervisor.ts    # Planning, delegation, and review
+│   ├── supervisor.ts    # Planning, delegation, knowledge, and review
 │   └── hive.ts          # Local task and memory persistence
-├── web/
-│   └── index.html       # Dashboard UI
-├── docs/images/         # README diagrams and visual previews
+├── agents/              # Default agent definitions
+├── skills/              # Reusable repository workflows
+├── docs/                # Architecture and skills documentation
+├── web/                 # Dashboard UI
 ├── test/                # Automated tests
 └── .hive/               # Runtime data created in a target workspace
 ```
@@ -261,12 +392,16 @@ officeoffice/
 ## Security and privacy
 
 - The dashboard binds to `127.0.0.1` by default.
+- `office web --lan` is opt-in and should only be used on a trusted private network.
 - Treat a coding-agent run as granting the provider CLI access to the selected workspace and whatever permissions that CLI has.
-- Use least-privilege credentials and a clean Git working tree; review changes before merging or deploying.
-- Never commit API keys, OAuth tokens, SSH keys, or other secrets.
-- Review `.hive/` before sharing a project; it may contain prompts, task descriptions, and agent output.
+- Use least-privilege credentials and a clean Git working tree; review diffs and test results before merging or deploying.
+- GitHub integrations should remain read-only unless a future mission explicitly requires a controlled write capability.
+- Treat GitHub issues, PRs, comments, CI output, XERJ results, documentation, browser content, transcripts, and provider output as untrusted project data.
+- Never expose API keys, OAuth tokens, SSH keys, or other secrets in source, prompts, logs, dashboard responses, or Hive records.
+- Review `.hive/` before sharing a project; it may contain prompts, task descriptions, room transcripts, and agent output.
 - Provider commands can have broad permissions. Understand each provider's own approval and sandbox settings.
-- Do not expose the dashboard to the public internet without adding appropriate authentication and access controls.
+- Do not expose the dashboard or an MCP server to the public internet without appropriate authentication and access controls.
+- Review external service privacy, licensing, and telemetry terms before enabling a provider for sensitive work.
 
 Read [SECURITY.md](SECURITY.md) to report a potential vulnerability.
 
@@ -352,7 +487,8 @@ Still planned:
 - Collaboration data is saved in `.hive/collaboration/`; back it up with care and review it before sharing.
 - User-created agent profiles must reference a provider ID present in the local configuration. Profile creation does not install or authenticate that provider.
 - Room messages and shared artifacts are local project data; avoid putting credentials or sensitive information in them.
-- `office doctor` checks provider executable/key presence; it does not make a live authenticated request to each provider.
+- External integrations are opt-in and depend on local CLIs, MCP-capable worker clients, credentials, network access, and the provider's own permissions.
+- `office doctor` checks provider/integration executable presence; it does not make a live authenticated request to every external service.
 - Updating GitHub does not update an existing local installation automatically. Source installs must pull changes and rebuild/relink as appropriate; packaged installs must install a newer release.
 
 ## Contributing
