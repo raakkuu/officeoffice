@@ -2,124 +2,35 @@
 
 **A local-first multi-agent coding orchestrator for real developer workflows.**
 
-[![CI](https://github.com/raakkuu/officeoffice/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/raakkuu/officeoffice/actions/workflows/ci.yml)
-[![Node.js 20+](https://img.shields.io/badge/Node.js-20%2B-43853d?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-gold.svg)](LICENSE)
+Office Office is the orchestration/control-room layer above coding-agent providers. Michael plans missions, specialist agents implement them, skills provide repeatable workflows, knowledge providers supply context, integrations provide external capabilities, and Michael reviews the result.
 
-Turn one engineering request into a coordinated plan for specialist coding agents. **Office Office is a terminal-first tool, not a hosted web application.** Its optional local web dashboard lets you submit tasks and monitor run history. Office Office is the orchestrator—not a model or an AI subscription. You choose and configure the provider CLIs you trust.
+## What you get
 
-<p align="center">
-  <img src="docs/images/terminal-preview.svg" alt="Illustrative Office Office terminal workflow concept, not a live screenshot" width="100%">
-</p>
-
-<p align="center">
-  <strong>Plan work · Delegate tasks · Track runs · Review results</strong>
-</p>
-
-## At a glance
-
-- **Michael** plans and coordinates the work.
-- **Dwight** specializes in backend and systems tasks.
-- **Pam** specializes in frontend and user experience.
-- **Jim** focuses on testing and quality in the current default team.
-- Dependency-aware scheduling with configurable parallelism.
-- A concise CLI experience: the pixel logo is shown for help/discovery rather than repeated before every operational command.
-- Human-readable `office config` output, with `office config --json` available for scripting.
-- Persistent task and run history in the local `.hive/` directory.
-- Optional responsive local web dashboard with task submission, dynamic agent profiles, saved skills, collaboration rooms, shared project artifacts, and run tracking.
-- Provider adapters for Claude Code, Codex CLI, Gemini CLI, Ollama, and custom CLI configurations.
-- Node.js-based process execution; no native PTY dependency is required.
-
-## Optional web dashboard
-
-The web interface is a local companion to the CLI. It is not a hosted product, and it currently has no login or multi-user access control. The dashboard includes Overview, task submission, built-in and user-created agent profiles, a pixel-style team-flow map, Meeting Room/Cafeteria room records, bounded AI discussions, a local skills library, shared project knowledge/artifacts, Run history, and Workspace health. Room discussions are explicitly started by you and use configured provider CLIs; they stop at the room's turn limit. The terminal visual above is explicitly an **illustration** of the CLI workflow, not a capture of a real run. For a dashboard view, see the [dashboard preview illustration](docs/images/dashboard-preview.svg).
-
-## Terminal identity
-
-The CLI uses a pixel-inspired block-letter logo with a coral accent and a minimal gold wordmark. The artwork is terminal text, not a cloud-hosted architecture or a screenshot of a completed run. Accent colors are used only in interactive terminals and can be disabled with `NO_COLOR`.
-
-```text
- ██████╗ ███████╗███████╗██╗ ██████╗███████╗
-██╔═══██╗██╔════╝██╔════╝██║██╔════╝██╔════╝
-██║   ██║█████╗  █████╗  ██║██║     █████╗  
-██║   ██║██╔══╝  ██╔══╝  ██║██║     ██╔══╝  
-╚██████╔╝██║     ██║     ██║╚██████╗███████╗
- ╚═════╝ ╚═╝     ╚═╝     ╚═╝ ╚═════╝╚══════╝
-             O F F I C E   O F F I C E
-```
-## How it works
-
-<p align="center">
-  <img src="docs/images/architecture.svg" alt="Office Office architecture: CLI and dashboard send work to Michael, who delegates tasks to specialist agents; run data is stored locally and reviewed." width="100%">
-</p>
-
-1. You submit a coding request through the CLI or dashboard.
-2. Michael asks the configured supervisor provider to turn it into a task plan.
-3. Specialist providers execute eligible tasks, respecting dependencies and the parallelism limit.
-4. Task and run state is saved under `.hive/`.
-5. The supervisor reviews the result and records a final run status.
-
-> **Important:** Agents can execute commands and modify files in the selected workspace. Use a Git-managed project, inspect diffs, and avoid running untrusted tasks against sensitive workspaces.
+- Michael — planning, delegation, and final review
+- Dwight — backend and systems
+- Pam — frontend and UX
+- Jim — testing and review
+- Dependency-aware parallel task execution
+- Local `.hive/` task, run, collaboration, and artifact data
+- Optional local web dashboard
+- Provider adapters for Claude Code, Codex CLI, Gemini CLI, Ollama, and custom CLIs
+- First-class reusable skills
+- Optional XERJ project knowledge
+- Optional GitHub, Playwright, and Context7 integrations
 
 ## Requirements
 
-- Node.js **20 or newer**
+- Node.js 20+
 - Git recommended
-- At least one supported provider CLI installed and authenticated, or a custom CLI provider configured
-- Provider usage may incur charges depending on your account and provider
+- At least one supported provider CLI installed/authenticated, or a custom provider
 
-## Core feature: a coordinated AI team
+## Install
 
-Office Office is built around a supervisor and specialist agents—not just a single chatbot. Michael plans work and delegates tasks to enabled specialists. The local dashboard also lets you start a bounded discussion where configured AI agents take turns responding to one another, with each reply saved in the room transcript.
-
-<p align="center">
-  <img src="docs/images/agent-communication.svg" alt="A simple Office Office collaboration map with pixel-style agent faces, specialist handoffs, and shared local project knowledge." width="100%">
-</p>
-
-### See it in the dashboard
-
-The **Team flow** section uses small pixel-style agent faces, role labels, connecting arrows, and a shared-workspace panel to make the collaboration flow easy to understand at a glance. Open the local dashboard with `office web` and look for **Team flow**.
-
-In **Rooms**, create or open a room and click **Run agent discussion** to let its enabled participants take bounded turns through their configured provider CLIs. Replies are saved locally. This is an explicit action—not a continuous background conversation—and provider usage may incur charges.
-
-Agent profiles, room records, skills, messages, and project artifacts are stored locally under `.hive/collaboration/`. Task dependency results are also passed to downstream task prompts as handoff context.
-
-## Which terminal should I use?
-
-**You do not need a different terminal for each command.** Open one terminal, run the commands for your operating system in order, and keep using that same terminal. The commands inside each code block are meant to be run one line at a time, from top to bottom. You only need another terminal window if you want to run a separate task at the same time.
-
-- **Windows:** use PowerShell or Command Prompt (CMD). The Windows install section below works with either unless it specifically says otherwise.
-- **macOS / Linux:** use the Terminal app and a Bash/Zsh-compatible shell.
-- **Android:** use the Termux app; ordinary Android apps such as the browser are not terminals.
-- **Inside the Office Office repository folder:** run project commands such as `npm install`, `npm run check`, `npm test`, and `npm run build`.
-- **What the commands mean:** `git clone` downloads the repository, `cd officeoffice` enters its folder, `npm install` installs project dependencies, `npm run check` checks the code, `npm test` runs tests, and `npm run build` builds the project. Use `npm install`—not `npm get`.
-
-Installing Office Office is separate from installing an AI provider. After Office Office is built, install and sign in to whichever provider CLI you want to use by following that provider's official instructions. You do not need to install every provider. The provider CLI must be available in the same environment where you run Office Office.
-
-## Install from source (Windows, macOS, Linux, and Termux)
-
-Office Office needs **Node.js 20+** and Git. Commands below are for a fresh install. Use the section after this one to update an existing checkout without losing your work.
-
-### Windows — Command Prompt (CMD) or PowerShell
-
-Install Git and Node.js if they are missing (using Windows Package Manager):
+### Windows
 
 ```powershell
 winget install --id Git.Git -e
 winget install --id OpenJS.NodeJS.LTS -e
-```
-
-Close and reopen the terminal, then check versions:
-
-```cmd
-git --version
-node --version
-npm --version
-```
-
-Clone and build (these commands work in CMD and PowerShell):
-
-```cmd
 git clone https://github.com/raakkuu/officeoffice.git
 cd officeoffice
 npm install
@@ -129,11 +40,7 @@ npm run build
 npm link
 ```
 
-If Windows asks for administrator permission for `npm link`, reopen the terminal with the appropriate permission or use the project locally with `npm run dev` if that script is available. Do not run commands from inside a different project directory.
-
-### macOS or Linux terminal
-
-Install Git and Node.js 20+ using your operating system's package manager or the official installers, then run:
+### macOS / Linux
 
 ```bash
 git clone https://github.com/raakkuu/officeoffice.git
@@ -145,19 +52,12 @@ npm run build
 npm link
 ```
 
-For Ubuntu/Debian, `sudo apt install git` installs Git, but the distribution's Node.js package may be older than version 20; verify `node --version` and use a current Node.js 20+ installation.
-
-### Android — Termux
-
-Install Termux from a trusted source such as F-Droid or the official Termux GitHub releases. In Termux, run:
+### Android / Termux
 
 ```bash
 pkg update
 pkg upgrade
 pkg install git nodejs-lts
-git --version
-node --version
-npm --version
 git clone https://github.com/raakkuu/officeoffice.git
 cd officeoffice
 npm install
@@ -166,50 +66,24 @@ npm test
 npm run build
 ```
 
-Termux package availability can vary. If `nodejs-lts` is unavailable, run `pkg search nodejs` and install the current supported Node.js package. You can run the CLI inside Termux; provider CLIs (Claude Code, Codex, Gemini, or other providers) must separately support Android/Termux and be installed/authenticated there. Some providers may not support Termux.
-
-After building, use `npm link` where supported to expose the `office` command globally. If global linking is unavailable, run the CLI through the repository's documented npm scripts or use the project-local binary after checking `package.json` scripts.
-
-Then check your environment and inspect the available commands:
-
-```bash
-office doctor
-office --help
-office agents
-```
-
-## Run your first task
-
-From the root of the repository you want the agents to work on:
-
-```bash
-office "Inspect this project, identify the highest-priority bug, and add a regression test"
-```
-
-Start the local dashboard instead:
-
-```bash
-office web
-```
-
-Open the local URL printed in your terminal (by default, `http://127.0.0.1:4311`). The optional dashboard can submit tasks and display saved run progress. In GitHub Codespaces, open the **Ports** panel and use the forwarded URL for port **4311**. The dashboard is a companion interface; the CLI remains a first-class way to use Office Office.
-
-The dashboard is intended for local development. Do not expose it publicly or forward it to an untrusted network.
+Provider CLIs must separately support Termux/Android if you want to run them there.
 
 ## Configure providers
 
-Office Office does not silently install or authenticate third-party AI services. Install the provider CLI you want to use and follow that provider's official setup instructions.
-
-Check what is available:
+Office Office does not silently install or authenticate AI services. Install the provider CLI you want and follow its official setup instructions.
 
 ```bash
 office doctor
 office config
 ```
 
-The default configuration lives at `~/.office-office/config.json`. Use `office config set supervisor <provider-id>` to select the supervisor provider. Provider IDs must match entries in your configuration.
+The local configuration is stored at `~/.office-office/config.json`. Change the supervisor with:
 
-Common API-key environment variables include:
+```bash
+office config set supervisor <provider-id>
+```
+
+Common environment variables:
 
 | Provider | Environment variable |
 | --- | --- |
@@ -218,146 +92,237 @@ Common API-key environment variables include:
 | Gemini | `GEMINI_API_KEY` |
 | Ollama | Usually local; no cloud key required |
 
-Set only the credentials you need. `office doctor` reports key presence, not the secret value. CLI authentication behavior varies by provider; a key may not be required when you use an already-authenticated CLI.
+`office doctor` reports credential presence, never the secret value.
 
-### Ollama
+## Run a mission
 
-Ollama can run local models. Make sure the Ollama CLI and selected model are installed, then verify your local configuration before starting a task. The default model in the generated configuration is `qwen2.5-coder:7b`.
+From the repository you want Office Office to modify:
+
+```bash
+office "Inspect this project, identify the highest-priority bug, and add a regression test"
+```
+
+Start the dashboard:
+
+```bash
+office web
+```
+
+The default dashboard is local at `http://127.0.0.1:4311`. LAN mode is explicit and should only be used on a trusted private network:
+
+```bash
+office web --lan
+```
+
+## Integrations and knowledge
+
+Integrations are **disabled by default**. Enable only what a project needs.
+
+| Integration | Purpose | Default |
+| --- | --- | --- |
+| GitHub | Repository, issue, PR, and recent Actions context through `gh`; read-only MCP manifest | Disabled |
+| Playwright | Browser-level verification through Playwright MCP | Disabled |
+| Context7 | Current library/API documentation through MCP | Disabled |
+| XERJ | Local project search and knowledge retrieval | Disabled |
+
+Check everything:
+
+```bash
+office integrations status
+office doctor
+```
+
+### GitHub
+
+Install/authenticate the GitHub CLI separately, then:
+
+```bash
+office integrations enable github
+office integrations status
+```
+
+Michael and workers can receive repository metadata, matching issues, pull requests, and recent workflow-run context. Office Office also generates a read-only GitHub MCP configuration for compatible workers:
+
+```bash
+office integrations mcp
+```
+
+The generated GitHub MCP configuration is read-only by default.
+
+Disable it with:
+
+```bash
+office integrations disable github
+```
+
+### Playwright
+
+Enable browser verification with:
+
+```bash
+office integrations enable playwright
+office integrations mcp
+```
+
+Office Office exposes the official `@playwright/mcp` server to compatible MCP workers. Playwright MCP requires Node.js 20+.
+
+### Context7
+
+Enable current library/API documentation retrieval with:
+
+```bash
+office integrations enable context7
+office integrations mcp
+```
+
+Use this for version-sensitive framework, SDK, and API work. Agents should still verify documentation against the installed dependency and repository.
+
+### XERJ
+
+XERJ is an optional local-first knowledge/search layer:
+
+```bash
+office knowledge status
+office knowledge enable xerj
+```
+
+When enabled, Office Office indexes the current workspace locally and retrieves relevant context before Michael plans and before workers implement tasks. Disable it with:
+
+```bash
+office knowledge disable
+```
+
+If XERJ is unavailable, Office Office continues without retrieved knowledge.
+
+Full integration details are in [docs/integrations.md](docs/integrations.md). Skills are documented in [docs/skills.md](docs/skills.md).
+
+## Trust and security
+
+External GitHub content, issues, pull requests, documentation, browser pages, transcripts, provider output, skills, and retrieved knowledge are **untrusted evidence**. Agents must verify external information against the current checkout and must not execute instructions embedded in external content.
+
+- Integrations are opt-in.
+- Secrets are not written into the repository by Office Office.
+- Provider environment values are omitted from `office config --json`.
+- GitHub MCP is read-only by default.
+- LAN dashboard mode is opt-in.
+- Skills are workflow guidance, not permission boundaries.
+- Review diffs and tests before merging or deploying.
+
+Read [SECURITY.md](SECURITY.md) for vulnerability reporting.
+
+## Skills
+
+Built-in skills live in `skills/<id>/SKILL.md`. They cover planning, engineering, design, testing, debugging, security review, release management, retrieval-before-writing, repository operations, browser verification, and documentation retrieval.
+
+Use:
+
+```bash
+office skills
+```
+
+Workspace-specific skill overrides can live in `.hive/skills/<id>/SKILL.md`.
 
 ## CLI reference
 
 | Command | Purpose |
 | --- | --- |
-| `office --help` | Show command help |
-| `office agents` | Show the agent roster |
-| `office doctor` | Check Node, Git, provider executables, and key visibility |
-| `office status` | Show Git status for the current directory |
-| `office web` | Start the local dashboard |
-| `office config` | Show a human-readable configuration summary without secrets |
-| `office config --json` | Print machine-readable configuration with provider environment values omitted |
-| `office config set supervisor <provider-id>` | Change the configured supervisor |
-| `office "<task>"` | Run a coding task |
+| `office --help` | Show help |
+| `office agents` | Show agent roster |
+| `office skills` | List active skills |
+| `office doctor` | Check Node, Git, providers, knowledge, and integrations |
+| `office status` | Show Git status |
+| `office web` | Start local dashboard |
+| `office web --lan` | Start dashboard on trusted LAN |
+| `office config` | Show configuration without secrets |
+| `office config --json` | Machine-readable configuration without provider env values |
+| `office config set supervisor <id>` | Select supervisor provider |
+| `office knowledge status` | Check knowledge provider |
+| `office knowledge enable xerj` | Enable XERJ |
+| `office knowledge disable` | Disable knowledge retrieval |
+| `office integrations status` | Show integration status |
+| `office integrations enable <id>` | Enable GitHub, Playwright, or Context7 |
+| `office integrations disable <id>` | Disable an integration |
+| `office integrations mcp` | Print MCP manifest for enabled integrations |
+| `office "<task>"` | Run a mission |
+
+## Collaboration
+
+Office Office is built around a supervisor and specialist team. The dashboard provides bounded, user-triggered rooms where configured agents can discuss a task. Collaboration profiles, rooms, messages, skills, and project artifacts are stored locally under `.hive/collaboration/`.
+
+Room discussions are explicit and bounded; Office Office does not run an always-on autonomous conversation.
+
+See [docs/agent-collaboration.md](docs/agent-collaboration.md).
 
 ## Project layout
 
 ```text
 officeoffice/
-├── bin/                 # Installed CLI entry point
+├── bin/                 # CLI entry point
 ├── src/
 │   ├── cli.ts           # CLI commands
-│   ├── config.ts        # Local provider configuration
-│   ├── providers.ts     # Provider process execution
-│   ├── scheduler.ts     # Task dependency scheduling
+│   ├── config.ts        # Local configuration
+│   ├── providers.ts     # Provider execution
+│   ├── scheduler.ts     # Dependency scheduling
+│   ├── supervisor.ts    # Planning, delegation, review
+│   ├── skills.ts        # Skill loading/selection
+│   ├── knowledge.ts     # Knowledge abstraction
+│   ├── integrations.ts  # External integrations
 │   ├── server.ts        # Local dashboard API
-│   ├── supervisor.ts    # Planning, delegation, and review
-│   └── hive.ts          # Local task and memory persistence
-├── web/
-│   └── index.html       # Dashboard UI
-├── docs/images/         # README diagrams and visual previews
+│   └── hive.ts          # Local persistence
+├── agents/              # Agent profiles
+├── skills/              # Reusable workflows
+├── docs/                # Architecture and integration docs
+├── web/                 # Dashboard UI
 ├── test/                # Automated tests
-└── .hive/               # Runtime data created in a target workspace
+└── .hive/               # Runtime data in a target workspace
 ```
 
-## Security and privacy
+## Development
 
-- The dashboard binds to `127.0.0.1` by default.
-- Treat a coding-agent run as granting the provider CLI access to the selected workspace and whatever permissions that CLI has.
-- Use least-privilege credentials and a clean Git working tree; review changes before merging or deploying.
-- Never commit API keys, OAuth tokens, SSH keys, or other secrets.
-- Review `.hive/` before sharing a project; it may contain prompts, task descriptions, and agent output.
-- Provider commands can have broad permissions. Understand each provider's own approval and sandbox settings.
-- Do not expose the dashboard to the public internet without adding appropriate authentication and access controls.
+```bash
+npm install
+npm run check
+npm test
+npm run build
+```
 
-Read [SECURITY.md](SECURITY.md) to report a potential vulnerability.
+Tests use mocked provider execution and should not require paid APIs or real credentials.
 
-## Updating an existing checkout safely (keep changes synchronized)
+## Updating safely
 
-**Run these steps in order, one at a time.** Updating Git itself does not update Office Office. These steps update the repository code from GitHub.
-
-1. Open the terminal in your Office Office repository folder.
-2. Check for local edits before pulling:
+Before updating an existing checkout:
 
 ```bash
 git status
 git branch --show-current
 ```
 
-3. If you have changes you want to keep, commit them or stash them before continuing. Do not overwrite uncommitted work.
-4. Switch to the branch you want to update and pull its latest commits. For the stable version, use `main`:
+Keep or stash local changes before pulling. For the stable branch:
 
 ```bash
 git switch main
 git pull --ff-only origin main
-```
-
-To test the collaboration work before it is merged, use `git switch feat/agent-collaboration` and then `git pull --ff-only origin feat/agent-collaboration` instead. That branch may change while the pull request is being reviewed.
-
-5. Install dependencies, check, test, and build in order:
-
-```bash
 npm install
 npm run check
 npm test
 npm run build
-```
-
-6. If you originally used `npm link` for a source install, relink after the build if your environment requires it:
-
-```bash
 npm link
 ```
 
-7. Verify the command points to the updated install:
-
-```bash
-office --help
-office doctor
-```
-
-If `git pull` says you have divergent branches or local changes, stop and resolve that before running a reset. **Do not use `git reset --hard` as a routine update command**—it can delete local work. If you downloaded a ZIP instead of cloning with Git, download/extract the new version separately and migrate your local configuration/workspace carefully rather than running `git pull`.
-
-### Development and checks
-
-```bash
-npm install
-npm run check
-npm test
-npm run build
-```
-
-The GitHub Actions workflow runs these checks on Node.js 20 and 22. Tests should use mocked provider execution and must not require paid APIs or real credentials.
-
-## Collaboration roadmap
-
-The core collaboration flow is now available in the feature branch: a visual team map, user-triggered bounded AI room discussions, saved transcripts, agent profiles, and local project artifacts. The full design is documented in [Agent Collaboration Architecture](docs/agent-collaboration.md), and planning is tracked in [GitHub issue #1](https://github.com/raakkuu/officeoffice/issues/1).
-
-Still planned:
-
-- Structured messages for questions, handoffs, progress reports, findings, and reviews.
-- Automatic task-triggered agent communication and richer handoff coordination.
-- Meeting summaries, decisions, and action items.
-- Optional Cafeteria sessions with strict limits.
-- Skill-to-agent assignment and controlled skill execution.
-- More granular workspace/network permissions, artifact provenance, retention controls, and secret redaction.
-
-**Current limits:** discussions only run when you click the button, stop at the room's turn limit (maximum 20 turns), and may incur provider usage charges. Agents do not run an always-on autonomous conversation, independently launch other agents, or automatically execute saved skills.
+Do not use `git reset --hard` as a routine update command.
 
 ## Known limitations
 
-- Agent quality, tool access, and costs depend on the configured provider and its CLI permissions.
-- A successful provider process does not guarantee that its code changes are correct; inspect the diff and test results.
-- The dashboard is local-first and currently has no user login or multi-user access control.
-- The dashboard run guard applies to a single running server process; it is not a cross-process job lock.
-- Runtime state is local to the workspace and is not a hosted team database.
-- Collaboration data is saved in `.hive/collaboration/`; back it up with care and review it before sharing.
-- User-created agent profiles must reference a provider ID present in the local configuration. Profile creation does not install or authenticate that provider.
-- Room messages and shared artifacts are local project data; avoid putting credentials or sensitive information in them.
-- `office doctor` checks provider executable/key presence; it does not make a live authenticated request to each provider.
-- Updating GitHub does not update an existing local installation automatically. Source installs must pull changes and rebuild/relink as appropriate; packaged installs must install a newer release.
+- Agent quality, tool access, and cost depend on the configured provider and its permissions.
+- A successful provider process does not guarantee correct code; inspect diffs and verification results.
+- The dashboard is local-first and has no built-in user login or multi-user access control.
+- Runtime state is local, not a hosted team database.
+- `office doctor` checks executable/key presence; it does not perform a live authenticated request to every provider.
+- Integration availability depends on local tools and whether the selected worker supports the generated MCP configuration.
 
 ## Contributing
 
-Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the project workflow. Please include tests for behavior changes and never include real secrets in fixtures.
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). Include tests for behavior changes and never include real secrets in fixtures.
 
 ## License
 
