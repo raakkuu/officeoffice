@@ -96,7 +96,7 @@ Common environment variables:
 
 ## Run a mission
 
-From the repository you want the agents to modify:
+From the repository you want Office Office to modify:
 
 ```bash
 office "Inspect this project, identify the highest-priority bug, and add a regression test"
@@ -147,7 +147,7 @@ Michael and workers can receive repository metadata, matching issues, pull reque
 office integrations mcp
 ```
 
-GitHub's official MCP server supports explicit toolsets and strict read-only mode; read-only mode removes write tools even when requested. citeturn0search0turn0search1
+The generated GitHub MCP configuration is read-only by default.
 
 Disable it with:
 
@@ -164,7 +164,7 @@ office integrations enable playwright
 office integrations mcp
 ```
 
-Office Office exposes the official `@playwright/mcp` server to compatible MCP workers. Playwright MCP requires Node.js 20+ and supports browser interaction through structured accessibility snapshots. citeturn0search2
+Office Office exposes the official `@playwright/mcp` server to compatible MCP workers. Playwright MCP requires Node.js 20+.
 
 ### Context7
 
