@@ -72,6 +72,18 @@ npm run build
 
 Provider CLIs must separately support Termux/Android if you want to run them there.
 
+## First run
+
+After installing a supported provider CLI, run the guided checklist:
+
+```bash
+office setup
+office doctor
+office config
+```
+
+See the [first-run guide](docs/first-run.md) for a small mission and verification checklist.
+
 ## Configure providers
 
 Office Office does not silently install or authenticate AI services. Install the provider CLI you want and follow its official setup instructions.
@@ -214,6 +226,8 @@ External GitHub content, issues, pull requests, documentation, browser pages, tr
 
 Read [SECURITY.md](SECURITY.md) for vulnerability reporting.
 
+Read [docs/safety.md](docs/safety.md) for the safety model and review checklist. Prompt guardrails are guidance, not a security sandbox.
+
 ## Skills
 
 Built-in skills live in `skills/<id>/SKILL.md`. They cover planning, engineering, design, testing, debugging, security review, release management, retrieval-before-writing, repository operations, browser verification, and documentation retrieval.
@@ -286,6 +300,10 @@ officeoffice/
 ├── test/                # Automated tests
 └── .hive/               # Runtime data in a target workspace
 ```
+
+## Releases
+
+Release tags matching `v*` trigger CI verification and GitHub Release creation. npm publishing is optional and requires the repository's `NPM_TOKEN` secret. See [CHANGELOG.md](CHANGELOG.md) for notable changes.
 
 ## Development
 
