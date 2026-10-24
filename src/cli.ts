@@ -2,7 +2,7 @@ import { loadConfig, saveConfig } from './config.js';
 import { providerDoctor } from './providers.js';
 import { Orchestrator } from './supervisor.js';
 import { startServer } from './server.js';
-import { status, isGitRepo, git } from './git.js';
+import { status, isGitRepo, git, currentBranch, diffStat, changedFiles, diff } from './git.js';
 import { renderBanner } from './banner.js';
 import { loadSkills } from './skills.js';
 import { createKnowledgeProvider } from './knowledge.js';
@@ -44,6 +44,7 @@ async function main() {
   office agents
   office skills
   office doctor
+  office review
   office knowledge status
   office knowledge enable xerj
   office knowledge disable
@@ -118,6 +119,21 @@ async function main() {
     const knowledge=createKnowledgeProvider(cfg.knowledge,cwd);console.log(`knowledge ${cfg.knowledge.enabled?'✓ enabled':'○ disabled'}  ${await knowledge.available()?'XERJ available':'XERJ not detected'}`);
     for(const s of await integrationStatuses(cfg.integrations,cwd)) console.log(`${s.id.padEnd(9)} ${s.enabled?'✓ enabled':'○ disabled'}  ${s.available?'available':'not detected'}`);
     console.log('\nThis checks executable/key presence; it does not prove authentication or a successful remote request.');console.log('API keys are never written to the project or Hive.');return;
+  }
+  if (cmd==='review') {
+    if(!(await isGitRepo(cwd))){console.error('Git review requires a Git repository.');process.exitCode=1;return;}
+    const branch=await currentBranch(cwd);const stat=await diffStat(cwd);const files=await changedFiles(cwd);const working=await status(cwd);
+    if([branch,stat,files,working].some(x=>x.code!==0)){console.error('Could not inspect the Git working tree safely.');process.exitCode=1;return;}
+    console.log('Office Office Git review\n-----------------------');
+    console.log(`Branch: ${branch.stdout.trim()||'(detached HEAD)'}`);
+    console.log(`Working tree: ${working.stdout.trim()?'changes present':'clean'}`);
+    console.log('\nChanged files:');console.log(files.stdout.trim()||'  No tracked changes compared with HEAD.');
+    console.log('\nDiff stat:');console.log(stat.stdout.trim()||'  No tracked changes compared with HEAD.');
+    if(args.includes('--diff')){const full=await diff(cwd);if(full.code!==0){console.error(full.stderr||'Could not read diff.');process.exitCode=1;return;}console.log('\nFull diff:');console.log(full.stdout||'No tracked diff.');}
+    console.log('\nRecommended verification before commit/push/merge:');
+    console.log('  npm run check');console.log('  npm test');console.log('  npm run build');
+    console.log('\nThis command is read-only: it does not commit, push, merge, or modify Git history.');
+    return;
   }
   if (cmd==='status') { console.log((await status(cwd)).stdout||'Working tree clean.'); return; }
   if (cmd==='diff') { const result=await git(cwd,['diff','HEAD']);if(result.code!==0){console.error(result.stderr||'Could not read Git diff.');process.exitCode=1;return;}console.log(result.stdout||'No tracked changes compared with HEAD. Run `office status` to check for untracked files.');return; }

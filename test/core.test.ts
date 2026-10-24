@@ -1,16 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { runnable, allDone, hasFailure } from '../src/scheduler.js';
+import { runnable, allDone, hasFailure, retryable, blockDependents } from '../src/scheduler.js';
 import type { Task } from '../src/types.js';
 
-const base = (id: string, status: Task['status'], dependsOn: string[] = []): Task => ({
+const base = (id: string, status: Task['status'], dependsOn: string[] = [], attempts = 0): Task => ({
   id,
   title: id,
   description: '',
   agent: 'jim',
   dependsOn,
   status,
-  attempts: 0,
+  attempts,
   createdAt: '',
   updatedAt: ''
 });
@@ -57,4 +57,17 @@ test('allDone is true only when a non-empty task list is entirely done', () => {
 test('hasFailure detects failed tasks', () => {
   assert.equal(hasFailure([base('a', 'done'), base('b', 'failed')]), true);
   assert.equal(hasFailure([base('a', 'done'), base('b', 'queued')]), false);
+});
+
+test('retryable selects failed tasks below the retry limit', () => {
+  const tasks = [base('fresh-failure', 'failed', [], 1), base('exhausted', 'failed', [], 2), base('done', 'done', [], 1)];
+  assert.deepEqual(retryable(tasks, 2).map(task => task.id), ['fresh-failure']);
+});
+
+test('blockDependents prevents work from running after a failed prerequisite', () => {
+  const tasks = [base('failed', 'failed'), base('dependent', 'queued', ['failed']), base('unrelated', 'queued')];
+  assert.equal(blockDependents(tasks), true);
+  assert.equal(tasks.find(task => task.id === 'dependent')?.status, 'blocked');
+  assert.match(tasks.find(task => task.id === 'dependent')?.error ?? '', /prerequisite/);
+  assert.equal(tasks.find(task => task.id === 'unrelated')?.status, 'queued');
 });
