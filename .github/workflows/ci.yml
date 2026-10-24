@@ -23,3 +23,15 @@ jobs:
       - run: npm run check
       - run: npm test
       - run: npm run build
+
+  review-gate:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify review guidance
+        run: |
+          test -f docs/git-review.md
+          test -f docs/safety.md
+          grep -q "git diff" docs/git-review.md
+          grep -q "git status" docs/git-review.md
