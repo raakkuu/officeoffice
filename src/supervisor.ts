@@ -18,7 +18,10 @@ function knowledgeText(results:Awaited<ReturnType<typeof retrieveKnowledge>>){re
 function readOnlyRequest(prompt:string){return /\b(read[- ]only|do not (modify|change|edit|write)|don't (modify|change|edit|write)|without (modifying|changing|editing|writing)|explain the (project|repository)|inspect (the|this) (project|repository))/i.test(prompt)}
 
 export class Orchestrator{
-  constructor(private cfg:OfficeConfig,private cwd:string,private emit:(x:string)=>void=console.log,private signal?:AbortSignal){}
+  constructor(private cfg:OfficeConfig,private cwd:string,private emit:(x:string)=>void=console.log,private signal?:AbortSignal){
+    const workerProviders=Object.values(this.cfg.workers).map(id=>this.cfg.providers.find(p=>p.id===id));
+    if(this.cfg.maxParallel>1&&workerProviders.length>0&&workerProviders.every(p=>p?.kind==='ollama'))this.cfg.maxParallel=1;
+  }
   private cancelled(){return this.signal?.aborted===true}
   private throwIfCancelled(){if(this.cancelled())throw new Error('Office Office run cancelled by user.')}
   async run(prompt:string):Promise<RunState>{
@@ -43,7 +46,7 @@ export class Orchestrator{
     const validAgents=new Set(agents.map(a=>a.id));const tasks:Task[]=plan.tasks.map((t,i)=>{if(!validAgents.has(t.agent))throw new Error(`Supervisor assigned task to unavailable agent: ${t.agent}`);return {id:t.id||`task-${i+1}`,title:String(t.title||`Task ${i+1}`).slice(0,200),description:String(t.description||'').slice(0,4000),agent:t.agent,dependsOn:Array.isArray(t.dependsOn)?t.dependsOn.filter(x=>typeof x==='string'):[],status:'queued',attempts:0,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()}});
     const taskIds=new Set(tasks.map(t=>t.id));for(const t of tasks){if(t.dependsOn.some(d=>!taskIds.has(d)||d===t.id))throw new Error(`Invalid dependency in task ${t.id}`)}
     const state:RunState={id,prompt,status:'running',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),summary:plan.summary,tasks};await fs.writeFile(path.join(runDir,`${id}.json`),JSON.stringify(state,null,2));for(const t of tasks)await hive.writeTask(t);
-    log(`Plan ready: ${plan.summary}`);log(`Michael: ${tasks.length} task${tasks.length===1?'':'s'} queued.`);for(const t of tasks)log(`  • ${t.agent} — ${t.title}`);
+    log(`Plan ready: ${plan.summary}`);log(`Michael: ${tasks.length} task${tasks.length===1?'':'s'} queued.`);for(const t of tasks)log(`  • ${t.agent} — ${t.title}`);if(this.cfg.maxParallel===1)log('Resource guard: local Ollama workers will run one task at a time to reduce RAM pressure.');
     const maxAttempts=2;
     while(!allDone(tasks)){
       this.throwIfCancelled();
