@@ -22,6 +22,19 @@ function findUrl(text: string): string | null {
   return match?.[0] ?? null;
 }
 
+function terminateProcessTree(child: ChildProcess): void {
+  if (!child.pid) {
+    child.kill('SIGTERM');
+    return;
+  }
+  if (process.platform === 'win32') {
+    const killer = spawn('taskkill', ['/pid', String(child.pid), '/t', '/f'], { stdio: 'ignore', windowsHide: true });
+    killer.once('error', () => child.kill('SIGTERM'));
+    return;
+  }
+  child.kill('SIGTERM');
+}
+
 export class PreviewManager {
   private child: ChildProcess | null = null;
   private state: PreviewState;
@@ -40,14 +53,14 @@ export class PreviewManager {
   }
 
   async start(script?: string): Promise<PreviewState> {
-    if (this.child && !this.child.killed) return this.snapshot();
+    // A child may have received a kill signal but not emitted close yet.
+    if (this.child) return this.snapshot();
     const scripts = await this.scripts();
     const selected = script && typeof scripts[script] === 'string' ? script : ['dev', 'start', 'serve'].find(name => typeof scripts[name] === 'string');
     if (!selected) throw new Error('No preview script found. Add a package.json script named dev, start, or serve.');
 
     this.state = { ...this.state, status: 'starting', script: selected, command: `npm run ${selected}`, url: null, port: null, output: '', error: null };
-    const args = ['run', selected];
-    const child = spawn(npmCommand(), args, { cwd: this.cwd, env: { ...process.env, BROWSER: 'none' }, shell: false, stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn(npmCommand(), ['run', selected], { cwd: this.cwd, env: { ...process.env, BROWSER: 'none' }, shell: false, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
     this.child = child;
     const consume = (chunk: Buffer) => {
       const text = chunk.toString();
@@ -64,7 +77,7 @@ export class PreviewManager {
     child.once('error', error => {
       this.state.status = 'failed';
       this.state.error = error.message;
-      this.child = null;
+      if (this.child === child) this.child = null;
     });
     child.once('close', code => {
       if (this.child === child) this.child = null;
@@ -80,9 +93,8 @@ export class PreviewManager {
 
   async stop(): Promise<PreviewState> {
     const child = this.child;
-    this.child = null;
     this.state.status = 'stopped';
-    if (child && !child.killed) child.kill(process.platform === 'win32' ? undefined : 'SIGTERM');
+    if (child && !child.killed) terminateProcessTree(child);
     return this.snapshot();
   }
 
