@@ -20,7 +20,8 @@ export async function startServer(cwd = process.cwd(), port = 4311, host = '127.
   const collaboration = new CollaborationStore(cwd);
   const preview = new PreviewManager(cwd);
 
-  await app.register(fastifyStatic, { root: web });
+  await app.register(fastifyStatic, { root: web, index: false });
+  app.get('/', async (_request, reply) => reply.sendFile('console.html'));
   app.get('/api/status', async () => { let git=''; try { git=(await status(cwd)).stdout; } catch(error) { git=error instanceof Error?error.message:String(error); } return {workspace:cwd,git,runActive,lastError,preview:preview.snapshot()}; });
   app.get('/api/config', async () => { const config=await loadConfig(cwd); return {...config,providers:config.providers.map(provider=>({...provider,env:undefined}))}; });
   app.get('/api/runs', async () => { try { const directory=path.join(cwd,'.hive','runs');const files=(await fs.readdir(directory)).filter(file=>file.endsWith('.json'));const results=await Promise.all(files.map(async file=>{try{return JSON.parse(await fs.readFile(path.join(directory,file),'utf8')) as {id?:string;[key:string]:unknown};}catch{return null;}}));return results.filter((run): run is NonNullable<typeof run> => run!==null).sort((a,b)=>String(b.id??'').localeCompare(String(a.id??''))); } catch { return []; } });
@@ -29,7 +30,6 @@ export async function startServer(cwd = process.cwd(), port = 4311, host = '127.
   app.get('/api/preview', async () => preview.snapshot());
   app.post('/api/preview/start', async (request,reply) => { try { const body=(request.body??{}) as {script?:unknown}; const script=typeof body.script==='string'?body.script:undefined; return await preview.start(script); } catch(error) { return reply.code(400).send({error:error instanceof Error?error.message:String(error)}); } });
   app.post('/api/preview/stop', async (_request,reply) => { try{return await preview.stop();}catch(error){return reply.code(400).send({error:error instanceof Error?error.message:String(error)});} });
-
   app.get('/api/agents', async () => collaboration.agents());
   app.post('/api/agents', async (request, reply) => { try { return reply.code(201).send(await collaboration.createAgent((request.body ?? {}) as any)); } catch(error) { return reply.code(400).send({error:error instanceof Error?error.message:String(error)}); } });
   app.patch('/api/agents/:id', async (request,reply) => { const {id}=request.params as {id:string}; try{return await collaboration.updateAgent(id,(request.body??{}) as any);}catch(error){return reply.code(400).send({error:error instanceof Error?error.message:String(error)});} });
