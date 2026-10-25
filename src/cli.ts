@@ -40,6 +40,8 @@ async function main() {
     printBanner();
     console.log(`\nUsage:
   office "Build authentication"
+  office run "Build authentication"
+  office start [--lan]
   office setup
   office agents
   office skills
@@ -83,7 +85,7 @@ async function main() {
     console.log('  1. Install and authenticate one supported provider CLI.');
     console.log('  2. Run office doctor to check providers and optional integrations.');
     console.log('  3. Run office "Describe a small, safe change and add a test" from a Git repository.');
-    console.log('  4. Run office web to open the local dashboard.');
+    console.log('  4. Run office start to open the local dashboard for this project.');
     console.log('  5. Review the Git diff and test results before committing or merging.');
     console.log('\\nSafety: integrations are opt-in. Prompt-based guardrails are not a security sandbox.');
     return;
@@ -121,10 +123,15 @@ async function main() {
   }
   if (cmd==='status') { console.log((await status(cwd)).stdout||'Working tree clean.'); return; }
   if (cmd==='diff') { const result=await git(cwd,['diff','HEAD']);if(result.code!==0){console.error(result.stderr||'Could not read Git diff.');process.exitCode=1;return;}console.log(result.stdout||'No tracked changes compared with HEAD. Run `office status` to check for untracked files.');return; }
-  if (cmd==='web') { const lan=args.includes('--lan');const host=lan?'0.0.0.0':'127.0.0.1';const server=await startServer(cwd,cfg.webPort,host);console.log(`Office Office UI: http://${lan?'<laptop-ip>':'127.0.0.1'}:${cfg.webPort}`);console.log(lan?'LAN dashboard enabled. Only use this on a trusted private network; stop it with Ctrl+C when finished.':'Local dashboard only. Press Ctrl+C to stop.');console.log('');await new Promise<void>(resolve=>process.on('SIGINT',()=>{server.close().then(()=>resolve());}));return; }
+  if (cmd==='web'||cmd==='start') { const lan=args.includes('--lan');const host=lan?'0.0.0.0':'127.0.0.1';const server=await startServer(cwd,cfg.webPort,host);console.log(`Office Office UI: http://${lan?'<laptop-ip>':'127.0.0.1'}:${cfg.webPort}`);console.log(`Workspace: ${cwd}`);console.log(lan?'LAN dashboard enabled. Only use this on a trusted private network; stop it with Ctrl+C when finished.':'Local dashboard only. This dashboard controls the project in the current terminal folder. Press Ctrl+C to stop.');console.log('');await new Promise<void>(resolve=>process.on('SIGINT',()=>{server.close().then(()=>resolve());}));return; }
   if (cmd==='config') {
     if(args[1]==='set'&&args[2]&&args[3]){if(args[2]==='supervisor'){const provider=cfg.providers.find(p=>p.id===args[3]);if(!provider){console.error(`Unknown provider "${args[3]}". Run office config to inspect provider IDs.`);process.exitCode=1;return;}cfg.supervisor=args[3];await saveConfig(cfg);console.log(`Supervisor set to ${args[3]}`);return;}console.error('Supported: office config set supervisor <provider-id>');process.exitCode=1;return;}
     printConfig(cfg);return;
+  }
+  if (cmd==='run') {
+    const prompt=args.slice(1).join(' ').trim();
+    if(!prompt){console.error('Usage: office run "<task>"');process.exitCode=1;return;}
+    const orchestrator=new Orchestrator(cfg,cwd,output=>process.stdout.write(output.endsWith('\n')?output:output+'\n'));await orchestrator.run(prompt);return;
   }
   const prompt=args.join(' ');if(!prompt.trim()){console.error('Unknown command or empty task. Run `office --help` for available commands.');process.exitCode=1;return;}
   const orchestrator=new Orchestrator(cfg,cwd,output=>process.stdout.write(output.endsWith('\n')?output:output+'\n'));await orchestrator.run(prompt);
