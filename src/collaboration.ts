@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import type { AgentDef } from './types.js';
+import { loadConfig } from './config.js';
 
 export type RoomKind = 'meeting' | 'cafeteria';
 export type RoomStatus = 'open' | 'closed';
@@ -75,7 +76,16 @@ export class CollaborationStore {
   }
   async agents(): Promise<AgentProfile[]> {
     const current = await this.list<AgentProfile>('agents');
-    if (current.length) return current;
+    if (current.length) {
+      const workspace = path.dirname(path.dirname(this.root));
+      const cfg = await loadConfig(workspace);
+      return current.map(agent => ({
+        ...agent,
+        provider: agent.id === 'michael'
+          ? cfg.supervisor || agent.provider
+          : cfg.workers[agent.id] || agent.provider
+      }));
+    }
     const stamp = now();
     const initial: AgentProfile[] = [
       { id:'michael', name:'Michael', role:'Supervisor', specialty:'Planning, delegation and review', provider:'claude', systemPrompt:'Plan work, coordinate specialists and verify outcomes.', skills:['planning','review'], enabled:true, createdAt:stamp, updatedAt:stamp },
@@ -84,7 +94,11 @@ export class CollaborationStore {
       { id:'jim', name:'Jim', role:'QA engineer', specialty:'Testing and quality', provider:'codex', systemPrompt:'Find edge cases and verify changes with tests.', skills:['testing'], enabled:true, createdAt:stamp, updatedAt:stamp }
     ];
     await this.save('agents', initial);
-    return initial;
+    const cfg = await loadConfig(path.dirname(path.dirname(this.root)));
+    return initial.map(agent => ({
+      ...agent,
+      provider: agent.id === 'michael' ? cfg.supervisor || agent.provider : cfg.workers[agent.id] || agent.provider
+    }));
   }
   async createAgent(input: Partial<AgentProfile>) {
     const agents = await this.agents();
@@ -112,7 +126,7 @@ export class CollaborationStore {
     const skills = await this.skills(); const name = clean(input.name,100), description = clean(input.description,300), instructions = clean(input.instructions,5000);
     if (!name || !description || !instructions) throw new Error('Skill name, description and instructions are required.');
     if (skills.length >= 100) throw new Error('Skill limit reached (100 skills).');
-    const stamp=now(); const skill: Skill={id:id('skill'),name,description,instructions,enabled:input.enabled!==false,createdAt:stamp,updatedAt:stamp};
+    const stamp=now(); const skill:Skill={id:id('skill'),name,description,instructions,enabled:input.enabled!==false,createdAt:stamp,updatedAt:stamp};
     skills.push(skill); await this.save('skills',skills); return skill;
   }
   async rooms(): Promise<Room[]> { return (await this.list<Room>('rooms')).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)); }
