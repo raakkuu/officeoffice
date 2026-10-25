@@ -15,9 +15,9 @@ const FONT: Record<string, string[]> = {
 
 function pixelWord(text: string): string[] {
   return Array.from({ length: 7 }, (_, row) =>
-    [...text].map(char => FONT[char] ?? FONT[' ']).map(bits =>
-      bits.replaceAll('1', '██').replaceAll('0', '  '),
-    ).join(' '),
+    [...text].map(char => (FONT[char] ?? FONT[' '])[row] ?? '0')
+      .map(bits => bits.replace(/1/g, '██').replace(/0/g, '  '))
+      .join(' '),
   );
 }
 
